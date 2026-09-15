@@ -1,7 +1,7 @@
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import FormInscricao from "@/components/FormInscricao";
 
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 export default async function Inscrever() {
   const { data: funcoes } = await supabaseAdmin()
