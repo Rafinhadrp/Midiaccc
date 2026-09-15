@@ -30,10 +30,16 @@ export default function Shell({ perfil, children }) {
       <div className="shell">
         <aside className="rail">
           <div className="brand">
-            <div className="mark" aria-hidden="true">▶</div>
+            <div className="mark" aria-hidden="true">
+              <img
+                src="/logo-branca.png"
+                alt=""
+                style={{ width: 22, height: 22, objectFit: "contain" }}
+              />
+            </div>
             <div>
-              <h3>Multimídia</h3>
-              <p>Painel do ministério</p>
+              <h3>Colheita</h3>
+              <p>Ministério de Multimídia</p>
             </div>
           </div>
           <nav>
