@@ -34,7 +34,7 @@ export default function Shell({ perfil, children }) {
               <img
                 src="/logo-branca.png"
                 alt=""
-                style={{ width: 22, height: 22, objectFit: "contain" }}
+                style={{ width: 30, height: 30, objectFit: "contain" }}
               />
             </div>
             <div>
