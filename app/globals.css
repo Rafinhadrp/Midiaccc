@@ -465,6 +465,156 @@ html, body { margin: 0; padding: 0; }
 }
 
 /* ============================================================
+   v4 — cole no FINAL de app/globals.css
+   Escalas editáveis, avisos, menu que sobe, folha no celular
+   e acabamento geral no mobile.
+   ============================================================ */
+
+/* ---- menu que abre para cima ---- */
+.mm .menu-wrap.para-cima .menu { top: auto; bottom: calc(100% + 6px); }
+
+/* folha deslizante no celular */
+.mm .folha-fundo {
+  position: fixed; inset: 0; z-index: 60; background: rgba(15,16,21,.45);
+  display: flex; align-items: flex-end;
+  animation: mm-fade .15s ease-out;
+}
+.mm .folha {
+  width: 100%; background: var(--card);
+  border-radius: 20px 20px 0 0; padding: 10px 10px calc(18px + env(safe-area-inset-bottom));
+  animation: mm-sobe .2s cubic-bezier(.2,.8,.3,1);
+}
+.mm .folha-alca {
+  width: 38px; height: 4px; border-radius: 2px; background: var(--line);
+  margin: 4px auto 10px;
+}
+.mm .folha .menu {
+  position: static; border: 0; box-shadow: none; padding: 0; min-width: 0;
+}
+.mm .folha .menu-item { padding: 14px 14px; font-size: 15px; border-radius: 10px; }
+.mm .folha .menu-item svg { width: 19px; height: 19px; }
+
+@keyframes mm-fade { from { opacity: 0 } to { opacity: 1 } }
+@keyframes mm-sobe { from { transform: translateY(14px) } to { transform: translateY(0) } }
+
+/* ---- escalas ---- */
+.mm .escala-card .ev-head { align-items: flex-start; }
+
+.mm .ev-data-edit {
+  display: flex; align-items: center; gap: 2px; flex-shrink: 0;
+  background: var(--off-bg); border-radius: var(--r-md); padding: 6px 8px;
+}
+.mm .ev-data-edit input {
+  width: 30px; border: 0; background: transparent; text-align: center;
+  font-family: 'Bricolage Grotesque', sans-serif; font-size: 19px; font-weight: 700;
+  padding: 0; color: var(--text);
+}
+.mm .ev-data-edit input::placeholder { color: #B9BCC8; font-weight: 600; }
+.mm .ev-data-edit .barra { color: var(--muted); font-weight: 600; }
+
+.mm .ev-topo-edit { display: flex; gap: 8px; }
+.mm .ev-topo-edit .campo-titulo {
+  flex: 1; min-width: 0; padding: 9px 12px;
+  border: 1px solid var(--line); border-radius: var(--r-sm); background: #FBFBFC;
+  font-weight: 600;
+}
+.mm .ev-topo-edit .campo-hora {
+  width: 104px; padding: 9px 10px;
+  border: 1px solid var(--line); border-radius: var(--r-sm); background: #FBFBFC;
+}
+
+.mm .obs-edit { padding: 14px 20px 4px; border-top: 1px solid var(--line-2); }
+
+.mm .obs-lida {
+  display: flex; gap: 10px; align-items: flex-start;
+  margin: 0 20px 4px; padding: 12px 14px;
+  background: var(--wait-bg); color: #7A5209; border-radius: var(--r-md);
+  font-size: 13.5px; line-height: 1.5; white-space: pre-wrap;
+}
+.mm .obs-lida svg { flex-shrink: 0; margin-top: 1px; }
+
+.mm .escala-rodape {
+  display: flex; gap: 9px; justify-content: flex-end;
+  padding: 16px 20px; border-top: 1px solid var(--line-2); background: #FCFCFD;
+}
+
+.mm .hero-obs {
+  margin-top: 10px; padding: 10px 13px; border-radius: 10px;
+  background: #1B1D26; color: #C9CCD8; font-size: 13.5px; line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* ---- atalhos do perfil (só no celular) ---- */
+.mm .so-celular { display: none; }
+.mm .atalho { display: block; text-decoration: none; color: inherit; }
+.mm .atalho:hover { background: #FAFAFB; }
+.mm .atalho-ico {
+  width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--off-bg); color: var(--ink-soft);
+}
+
+/* ============ CELULAR ============ */
+@media (max-width: 880px) {
+  .mm .so-celular { display: block; }
+
+  /* respiro e alvos de toque maiores */
+  .mm .content { padding: 0 14px 30px; }
+  .mm .card, .mm .block { border-radius: 16px; }
+  .mm .item { padding: 14px 16px; }
+  .mm .block-head { padding: 16px; flex-wrap: wrap; gap: 10px; }
+  .mm .btn { padding: 11px 16px; }
+  .mm .btn-sm { padding: 9px 13px; }
+  .mm .btn-ico { width: 38px; height: 38px; }
+
+  /* barra de baixo com 5 abas confortáveis */
+  .mm .tabbar { left: 10px; right: 10px; padding: 5px; }
+  .mm .tab { padding: 9px 2px; font-size: 10.5px; gap: 3px; }
+
+  /* cartão do culto empilhado */
+  .mm .escala-card .ev-head { flex-wrap: wrap; gap: 12px; }
+  .mm .escala-card .ev-head > div:last-child { width: 100%; justify-content: space-between; }
+  .mm .ev-topo-edit { flex-direction: column; }
+  .mm .ev-topo-edit .campo-hora { width: 100%; }
+  .mm .obs-lida, .mm .obs-edit { margin-left: 16px; margin-right: 16px; padding-left: 12px; padding-right: 12px; }
+  .mm .obs-edit { margin: 0; padding: 14px 16px 4px; }
+  .mm .escala-rodape { padding: 14px 16px; }
+  .mm .escala-rodape .btn { flex: 1; justify-content: center; }
+
+  /* funções: rótulo em cima, campo embaixo */
+  .mm .assign { padding: 13px 16px; }
+  .mm .assign .fn { font-size: 13px; color: var(--muted); }
+  .mm .assign select { padding: 11px 12px; }
+
+  /* modais viram folha de baixo */
+  .mm .overlay { align-items: flex-end; padding: 0; }
+  .mm .modal {
+    border-radius: 20px 20px 0 0; max-height: 92vh;
+    animation: mm-sobe .2s cubic-bezier(.2,.8,.3,1);
+  }
+  .mm .modal-foot {
+    position: sticky; bottom: 0; background: #fff;
+    padding-bottom: calc(18px + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--line-2);
+  }
+  .mm .modal-foot .btn { flex: 1; justify-content: center; }
+
+  /* tipografia um pouco menor nos títulos gigantes */
+  .mm .hero .day { font-size: 44px; }
+  .mm .stat .n { font-size: 26px; }
+
+  /* evita zoom automático do iOS ao focar campo */
+  .mm input, .mm select, .mm textarea { font-size: 16px; }
+  .mm .field > span { font-size: 13.5px; }
+}
+
+@media (max-width: 380px) {
+  .mm .tab { font-size: 9.5px; }
+  .mm .topbar h2 { font-size: 21px; }
+}
+
+
+/* ============================================================
    v5 — cole no FINAL de app/globals.css
    Chave liga/desliga, led verde, marca e tela de inscrições
    fechadas.

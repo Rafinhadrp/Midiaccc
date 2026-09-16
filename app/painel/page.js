@@ -4,6 +4,7 @@ import { perfilAtual, pode } from "@/lib/permissoes";
 import Avatar from "@/components/Avatar";
 import Icone from "@/components/Icones";
 import Topo from "@/components/Topo";
+import Avisos from "@/components/Avisos";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,9 @@ export default async function Painel() {
   const perfil = await perfilAtual();
   const hoje = new Date().toISOString().slice(0, 10);
 
-  const [{ data: funcoes }, { data: eventos }, { data: pendentes }, { data: membros }, { data: notifs }] =
+  await supabase.rpc("limpar_avisos_vencidos");
+
+  const [{ data: funcoes }, { data: eventos }, { data: pendentes }, { data: membros }, { data: avisos }] =
     await Promise.all([
       supabase.from("funcoes").select("*").order("ordem"),
       supabase
@@ -25,11 +28,9 @@ export default async function Painel() {
         ? supabase.from("inscricoes").select("*").eq("status", "pendente").order("criado_em", { ascending: false })
         : Promise.resolve({ data: [] }),
       pode(perfil, "membros:ver")
-        ? supabase.from("perfis").select("id, nome, foto_url").eq("ativo", true)
+        ? supabase.from("perfis").select("id").eq("ativo", true)
         : Promise.resolve({ data: [] }),
-      pode(perfil, "inscricoes:ver")
-        ? supabase.from("notificacoes").select("*").order("criado_em", { ascending: false }).limit(5)
-        : Promise.resolve({ data: [] }),
+      supabase.from("avisos").select("*").order("fixado", { ascending: false }).order("criado_em", { ascending: false }),
     ]);
 
   const proximo = eventos?.[0];
@@ -38,7 +39,6 @@ export default async function Painel() {
     0
   );
 
-  // Minhas escalas confirmadas ou pendentes nos próximos cultos
   const minhas = (eventos ?? []).flatMap((ev) =>
     (ev.escalacoes ?? [])
       .filter((e) => e.perfis?.id === perfil.id)
@@ -60,7 +60,12 @@ export default async function Painel() {
 
             <div style={{ flex: 1, minWidth: 0 }}>
               <h3>{proximo.titulo}</h3>
-              <div className="meta">Equipe escalada</div>
+              {proximo.observacao ? (
+                <div className="hero-obs">{proximo.observacao}</div>
+              ) : (
+                <div className="meta">Equipe escalada</div>
+              )}
+
               <div className="crew">
                 {(funcoes ?? []).map((f) => {
                   const e = proximo.escalacoes?.find((x) => x.funcao_id === f.id);
@@ -100,6 +105,12 @@ export default async function Painel() {
             </div>
           </div>
         )}
+
+        <Avisos
+          avisosIniciais={avisos ?? []}
+          podeGerenciar={pode(perfil, "avisos:gerenciar")}
+          meuId={perfil.id}
+        />
 
         {minhas.length > 0 && (
           <div className="card block">
@@ -166,36 +177,6 @@ export default async function Painel() {
                     </div>
                   </div>
                   <span className="pill pill-wait"><span className="dot" />pendente</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {!!notifs?.length && (
-          <div className="card block">
-            <div className="block-head">
-              <div>
-                <h3>Mensagens enviadas</h3>
-                <div className="sub">Registro de tudo que o sistema disparou</div>
-              </div>
-            </div>
-            {notifs.map((n) => (
-              <div className="item" key={n.id}>
-                <div className="linha-acao">
-                  <span style={{ color: "var(--muted)" }}>
-                    <Icone nome={n.canal === "whatsapp" ? "transmissao" : "email"} size={17} />
-                  </span>
-                  <div className="cresce">
-                    <div className="item-name">{n.destino}</div>
-                    <div className="item-meta">
-                      {n.canal === "whatsapp" ? "WhatsApp" : "E-mail"}, {n.tipo}
-                      {n.erro ? ` — ${n.erro}` : ""}
-                    </div>
-                  </div>
-                  <span className={"pill pill-" + (n.status === "enviado" ? "go" : "off")}>
-                    <span className="dot" />{n.status}
-                  </span>
                 </div>
               </div>
             ))}

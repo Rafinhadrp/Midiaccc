@@ -11,8 +11,8 @@ const ABAS = [
   { href: "/painel/inscricoes", nome: "Inscrições", ico: "inscricoes", perm: "inscricoes:ver" },
   { href: "/painel/escalas",    nome: "Escalas",    ico: "escalas",    perm: "escalas:ver" },
   { href: "/painel/membros",    nome: "Membros",    ico: "membros",    perm: "membros:ver" },
-  { href: "/painel/acessos",    nome: "Acessos",    ico: "acessos",    perm: "acessos:gerenciar" },
-  // No computador o perfil fica no cartão do rodapé; no celular vira aba.
+  { href: "/painel/registro",   nome: "Registro",   ico: "email",      perm: "inscricoes:ver", soDesktop: true },
+  { href: "/painel/acessos",    nome: "Acessos",    ico: "acessos",    perm: "acessos:gerenciar", soDesktop: true },
   { href: "/painel/perfil",     nome: "Perfil",     ico: "perfil",     perm: null, soMobile: true },
 ];
 
@@ -33,11 +33,7 @@ export default function Shell({ perfil, children }) {
         <aside className="rail">
           <div className="brand">
             <div className="mark" aria-hidden="true">
-              <img
-                src="/logo-branca.png"
-                alt=""
-                style={{ width: 30, height: 30, objectFit: "contain" }}
-              />
+              <img src="/logo-branca.png" alt="" style={{ width: 30, height: 30, objectFit: "contain" }} />
             </div>
             <div>
               <h3>Colheita</h3>
@@ -81,14 +77,15 @@ export default function Shell({ perfil, children }) {
         <div className="main">{children}</div>
       </div>
 
+      {/* No celular a barra fica com 5 itens; Registro e Acessos entram no Perfil */}
       <nav className="tabbar">
-        {abas.map((a) => (
+        {abas.filter((a) => !a.soDesktop).map((a) => (
           <Link key={a.href} href={a.href} className={"tab" + (caminho === a.href ? " on" : "")}>
             <span className="ico">
               {a.href === "/painel/perfil" ? (
-                <Avatar nome={perfil.nome} foto={perfil.foto_url} size={19} />
+                <Avatar nome={perfil.nome} foto={perfil.foto_url} size={20} />
               ) : (
-                <Icone nome={a.ico} size={18} />
+                <Icone nome={a.ico} size={19} />
               )}
             </span>
             {a.nome}

@@ -2,6 +2,7 @@ import { perfilAtual } from "@/lib/permissoes";
 import { supabaseServidor } from "@/lib/supabase/server";
 import Topo from "@/components/Topo";
 import FormPerfil from "@/components/FormPerfil";
+import FormPerfilAtalhos from "@/components/FormPerfilAtalhos";
 
 export const dynamic = "force-dynamic";
 
@@ -28,6 +29,7 @@ export default async function PaginaPerfil() {
           }}
           funcoes={minhas}
         />
+        <FormPerfilAtalhos permissoes={perfil.permissoes} />
       </div>
     </>
   );
