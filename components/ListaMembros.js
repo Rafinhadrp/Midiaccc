@@ -3,24 +3,37 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Avatar from "./Avatar";
 import AvatarUpload from "./AvatarUpload";
+import Icone from "./Icones";
+import Menu from "./Menu";
+import Confirmar from "./Confirmar";
+import CampoSenha from "./CampoSenha";
 import { supabaseNavegador } from "@/lib/supabase/cliente";
 
 export default function ListaMembros({ membros, funcoes, papeis, podeEditar, meuId }) {
   const router = useRouter();
   const [busca, setBusca] = useState("");
   const [erro, setErro] = useState(null);
-  const [expandido, setExpandido] = useState(null);
+  const [editandoFuncoes, setEditandoFuncoes] = useState(null);
   const [senhaDe, setSenhaDe] = useState(null);
+  const [excluindo, setExcluindo] = useState(null);
 
   const lista = membros.filter((m) => {
-    const alvo = (m.nome + " " + (m.usuario ?? "")).toLowerCase();
+    const alvo = (m.nome + " " + (m.usuario ?? "") + " " + (m.email ?? "")).toLowerCase();
     return alvo.includes(busca.toLowerCase());
   });
 
   async function mudarPapel(id, papel_id) {
     const { error } = await supabaseNavegador().from("perfis").update({ papel_id }).eq("id", id);
-    if (error) setErro(error.message);
-    else router.refresh();
+    if (error) {
+      setErro(
+        /pelo menos um líder/i.test(error.message)
+          ? "O ministério precisa de pelo menos um líder. Promova outra pessoa antes."
+          : error.message
+      );
+    } else {
+      setErro(null);
+      router.refresh();
+    }
   }
 
   async function alternarFuncao(perfilId, funcaoId, tem) {
@@ -32,36 +45,66 @@ export default function ListaMembros({ membros, funcoes, papeis, podeEditar, meu
     else router.refresh();
   }
 
+  async function apagarMembro(m) {
+    const r = await fetch(`/api/membros/${m.id}`, { method: "DELETE" });
+    const dados = await r.json();
+    if (!r.ok) return { erro: dados.erro || "Não deu certo." };
+    setExcluindo(null);
+    router.refresh();
+    return {};
+  }
+
   return (
     <>
       {erro && <div className="aviso aviso-erro">{erro}</div>}
 
-      <input
-        value={busca}
-        onChange={(e) => setBusca(e.target.value)}
-        placeholder="Buscar pelo nome ou usuário"
-        style={{ width: "100%", padding: "12px 16px", border: "1px solid var(--line)", borderRadius: 999, background: "#fff" }}
-      />
+      <div className="senha-wrap">
+        <input
+          value={busca}
+          onChange={(e) => setBusca(e.target.value)}
+          placeholder="Buscar por nome, usuário ou e-mail"
+          style={{
+            width: "100%", padding: "11px 14px 11px 40px",
+            border: "1px solid var(--line)", borderRadius: 10, background: "#fff",
+          }}
+        />
+        <span style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "var(--muted)" }}>
+          <Icone nome="busca" size={17} />
+        </span>
+      </div>
 
       <div className="card block" style={{ marginTop: 14 }}>
         <div className="block-head">
           <div>
             <h3>Equipe</h3>
-            <div className="sub">Toque na foto de alguém para trocar a imagem</div>
+            <div className="sub">{lista.length} {lista.length === 1 ? "pessoa" : "pessoas"}</div>
           </div>
         </div>
 
         {lista.map((m) => {
           const podeTrocarFoto = podeEditar || m.id === meuId;
+          const souEu = m.id === meuId;
+
           return (
             <div className="item" key={m.id}>
               <div className="item-head">
-                {podeTrocarFoto
-                  ? <AvatarUpload perfilId={m.id} nome={m.nome} foto={m.foto_url} size={48} onTrocou={() => router.refresh()} />
-                  : <Avatar nome={m.nome} foto={m.foto_url} size={48} />}
+                {podeTrocarFoto ? (
+                  <AvatarUpload
+                    perfilId={m.id}
+                    nome={m.nome}
+                    foto={m.foto_url}
+                    size={46}
+                    onTrocou={() => router.refresh()}
+                  />
+                ) : (
+                  <Avatar nome={m.nome} foto={m.foto_url} size={46} />
+                )}
 
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div className="item-name">{m.nome}</div>
+                  <div className="item-name">
+                    {m.nome}
+                    {souEu && <span className="small muted" style={{ fontWeight: 500 }}> · você</span>}
+                  </div>
                   <div className="item-meta">
                     {m.usuario ? `@${m.usuario} · ` : ""}{m.telefone || m.email}
                   </div>
@@ -69,39 +112,56 @@ export default function ListaMembros({ membros, funcoes, papeis, podeEditar, meu
                     {funcoes
                       .filter((f) => m.funcoes.includes(f.id))
                       .map((f) => (
-                        <span className="pill" key={f.id}>
-                          <span className="fdot" style={{ background: f.cor }} />
+                        <span className="fn-tag" key={f.id}>
+                          <span className="fn-ico" style={{ color: f.cor }}>
+                            <Icone nome={f.icone} size={14} />
+                          </span>
                           {f.nome}
                         </span>
                       ))}
-                    {m.funcoes.length === 0 && <span className="small muted">sem função definida</span>}
+                    {m.funcoes.length === 0 && (
+                      <span className="small muted">sem função definida</span>
+                    )}
                   </div>
                 </div>
 
                 {podeEditar && (
-                  <select
-                    value={m.papel_id}
-                    onChange={(e) => mudarPapel(m.id, e.target.value)}
-                    style={{ padding: "7px 11px", border: "1px solid var(--line)", borderRadius: 999, background: "#fff", fontSize: 13, fontWeight: 600 }}
-                  >
-                    {papeis.map((p) => <option key={p.id} value={p.id}>{p.nome}</option>)}
-                  </select>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                    <select
+                      value={m.papel_id}
+                      onChange={(e) => mudarPapel(m.id, e.target.value)}
+                      style={{
+                        padding: "7px 10px", border: "1px solid var(--line)",
+                        borderRadius: 8, background: "#fff", fontSize: 13, fontWeight: 600,
+                      }}
+                    >
+                      {papeis.map((p) => <option key={p.id} value={p.id}>{p.nome}</option>)}
+                    </select>
+
+                    <Menu
+                      rotulo={`Opções de ${m.nome}`}
+                      itens={[
+                        {
+                          nome: editandoFuncoes === m.id ? "Fechar funções" : "Editar funções",
+                          icone: "editar",
+                          onClick: () => setEditandoFuncoes(editandoFuncoes === m.id ? null : m.id),
+                        },
+                        { nome: "Redefinir senha", icone: "chave", onClick: () => setSenhaDe(m) },
+                        !souEu && { separador: true },
+                        !souEu && {
+                          nome: "Excluir conta",
+                          icone: "lixeira",
+                          perigo: true,
+                          onClick: () => setExcluindo(m),
+                        },
+                      ]}
+                    />
+                  </div>
                 )}
               </div>
 
-              {podeEditar && (
-                <div className="item-actions" style={{ paddingLeft: 61 }}>
-                  <button className="btn btn-sm" onClick={() => setExpandido(expandido === m.id ? null : m.id)}>
-                    {expandido === m.id ? "Fechar funções" : "Editar funções"}
-                  </button>
-                  <button className="btn btn-sm" onClick={() => setSenhaDe(m)}>
-                    Redefinir senha
-                  </button>
-                </div>
-              )}
-
-              {podeEditar && expandido === m.id && (
-                <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginTop: 11, paddingLeft: 61 }}>
+              {podeEditar && editandoFuncoes === m.id && (
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginTop: 13, paddingLeft: 59 }}>
                   {funcoes.map((f) => {
                     const tem = m.funcoes.includes(f.id);
                     return (
@@ -110,7 +170,9 @@ export default function ListaMembros({ membros, funcoes, papeis, podeEditar, meu
                         className={"pill pill-pick" + (tem ? " pill-on" : "")}
                         onClick={() => alternarFuncao(m.id, f.id, tem)}
                       >
-                        <span className="fdot" style={{ background: f.cor }} />
+                        <span className="fn-ico" style={{ color: tem ? "#fff" : f.cor }}>
+                          <Icone nome={f.icone} size={14} />
+                        </span>
                         {f.nome}
                       </button>
                     );
@@ -121,10 +183,21 @@ export default function ListaMembros({ membros, funcoes, papeis, podeEditar, meu
           );
         })}
 
-        {lista.length === 0 && <div className="empty small">Ninguém com esse nome.</div>}
+        {lista.length === 0 && <div className="vazio-linha">Ninguém encontrado com esse termo.</div>}
       </div>
 
       {senhaDe && <ModalSenha membro={senhaDe} onFechar={() => setSenhaDe(null)} />}
+
+      {excluindo && (
+        <Confirmar
+          titulo={`Excluir a conta de ${excluindo.nome.split(" ")[0]}`}
+          descricao={`${excluindo.nome} perde o acesso ao painel e sai de todas as escalas futuras. Para voltar, a pessoa terá que se inscrever de novo.`}
+          digitar="EXCLUIR"
+          rotuloBotao="Excluir conta"
+          onCancelar={() => setExcluindo(null)}
+          onConfirmar={() => apagarMembro(excluindo)}
+        />
+      )}
     </>
   );
 }
@@ -167,11 +240,11 @@ function ModalSenha({ membro, onFechar }) {
 
   return (
     <div className="overlay" onClick={onFechar}>
-      <div className="modal modal-estreito" onClick={(e) => e.stopPropagation()}>
+      <div className="modal confirma" onClick={(e) => e.stopPropagation()}>
         <div className="modal-head">
           <Avatar nome={membro.nome} foto={membro.foto_url} size={44} />
           <div>
-            <h3 style={{ fontSize: 18 }}>Redefinir senha</h3>
+            <h3 style={{ fontSize: 17 }}>Redefinir senha</h3>
             <div className="small muted">{membro.nome}</div>
           </div>
         </div>
@@ -184,7 +257,7 @@ function ModalSenha({ membro, onFechar }) {
               <button
                 key={id}
                 className={"pill pill-pick" + (modo === id ? " pill-on" : "")}
-                style={{ padding: "9px 15px" }}
+                style={{ padding: "9px 14px" }}
                 onClick={() => { setModo(id); setAviso(null); }}
               >
                 {nome}
@@ -200,18 +273,17 @@ function ModalSenha({ membro, onFechar }) {
           ) : (
             <>
               <div className="small muted" style={{ marginBottom: 14 }}>
-                Use só quando a pessoa não conseguir acessar o e-mail. Combine a senha com ela
-                pessoalmente e peça que troque no primeiro acesso, em Meu perfil.
+                Use só quando a pessoa não conseguir acessar o e-mail. Combine a senha
+                pessoalmente e peça que troque no primeiro acesso.
               </div>
-              <label className="field">
-                <span>Senha temporária</span>
-                <input
-                  value={senha}
-                  onChange={(e) => setSenha(e.target.value)}
-                  placeholder="mínimo 8 caracteres"
-                  autoComplete="off"
-                />
-              </label>
+              <CampoSenha
+                rotulo="Senha temporária"
+                valor={senha}
+                onChange={setSenha}
+                autoComplete="off"
+                forca
+                ajuda="Mínimo de 8 caracteres."
+              />
             </>
           )}
         </div>

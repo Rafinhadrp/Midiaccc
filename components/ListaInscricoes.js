@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Avatar from "./Avatar";
+import Icone from "./Icones";
 
 export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
   const router = useRouter();
@@ -9,17 +10,25 @@ export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
   const [aberta, setAberta] = useState(null);
   const [modal, setModal] = useState(null);
 
-  const nomeFuncao = (id) => funcoes.find((f) => f.id === id)?.nome ?? id;
-  const corFuncao = (id) => funcoes.find((f) => f.id === id)?.cor ?? "#999";
+  const acharFuncao = (id) => funcoes.find((f) => f.id === id);
+  const nomeFuncao = (id) => acharFuncao(id)?.nome ?? id;
   const lista = inscricoes.filter((i) => (filtro === "todas" ? true : i.status === filtro));
+
+  const contar = (status) =>
+    status === "todas" ? inscricoes.length : inscricoes.filter((i) => i.status === status).length;
 
   return (
     <>
       <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
         {[["pendente", "Pendentes"], ["aprovado", "Aprovadas"], ["recusado", "Recusadas"], ["todas", "Todas"]].map(
           ([id, nome]) => (
-            <button key={id} className={"pill pill-pick" + (filtro === id ? " pill-on" : "")} onClick={() => setFiltro(id)}>
+            <button
+              key={id}
+              className={"pill pill-pick" + (filtro === id ? " pill-on" : "")}
+              onClick={() => setFiltro(id)}
+            >
               {nome}
+              <span style={{ opacity: 0.6 }}>{contar(id)}</span>
             </button>
           )
         )}
@@ -29,7 +38,7 @@ export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
         {lista.length === 0 && (
           <div className="empty">
             <div style={{ fontWeight: 600, color: "var(--text)" }}>Nada por aqui</div>
-            <div className="small" style={{ marginTop: 5 }}>
+            <div className="small" style={{ marginTop: 6 }}>
               Quando alguém se inscrever pela página pública, aparece nesta lista.
             </div>
           </div>
@@ -39,18 +48,25 @@ export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
           <div className="item" key={i.id} style={idx === 0 ? { borderTop: 0 } : undefined}>
             <div className="item-head">
               <Avatar nome={i.nome} foto={i.foto_url} size={46} />
+
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div className="item-name">{i.nome}</div>
-                <div className="item-meta">{i.idade ? `${i.idade} anos, ` : ""}{i.telefone}</div>
+                <div className="item-meta">{i.idade ? `${i.idade} anos · ` : ""}{i.telefone}</div>
                 <div className="tags">
-                  {i.funcoes.map((f) => (
-                    <span className="pill" key={f}>
-                      <span className="fdot" style={{ background: corFuncao(f) }} />
-                      {nomeFuncao(f)}
-                    </span>
-                  ))}
+                  {i.funcoes.map((id) => {
+                    const f = acharFuncao(id);
+                    return (
+                      <span className="fn-tag" key={id}>
+                        <span className="fn-ico" style={{ color: f?.cor ?? "#999" }}>
+                          <Icone nome={f?.icone ?? "ponto"} size={14} />
+                        </span>
+                        {nomeFuncao(id)}
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
+
               <span className={"pill pill-" + (i.status === "pendente" ? "wait" : i.status === "aprovado" ? "go" : "off")}>
                 <span className="dot" />{i.status}
               </span>
@@ -58,7 +74,7 @@ export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
 
             {aberta === i.id && (
               <div style={{ marginTop: 14, paddingLeft: 59 }}>
-                <div className="divider" style={{ marginBottom: 13 }} />
+                <div className="divider" style={{ marginBottom: 14 }} />
                 {[
                   ["Experiência", i.experiencia || "não informou"],
                   ["Disponibilidade", i.disponibilidade || "não informou"],
@@ -79,8 +95,11 @@ export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
               </button>
               {podeDecidir && i.status === "pendente" && (
                 <>
-                  <button className="btn btn-sm btn-go" onClick={() => setModal({ inscricao: i, tipo: "aprovado" })}>
-                    Aprovar
+                  <button
+                    className="btn btn-sm btn-go btn-linha"
+                    onClick={() => setModal({ inscricao: i, tipo: "aprovado" })}
+                  >
+                    <Icone nome="cheque" size={15} /> Aprovar
                   </button>
                   <button className="btn btn-sm" onClick={() => setModal({ inscricao: i, tipo: "recusado" })}>
                     Recusar
@@ -120,6 +139,7 @@ function ModalDecisao({ inscricao, tipo, nomeFuncao, onFechar, onPronto }) {
         body: JSON.stringify({ decisao: tipo, canal, textoPersonalizado: texto }),
       });
       const dados = await r.json();
+
       if (!r.ok) { setErro(dados.erro || "Não deu certo."); setOcupado(false); return; }
       if (!dados.enviado) {
         setErro(`Decisão salva, mas a mensagem não saiu: ${dados.erroEnvio}`);
@@ -151,7 +171,12 @@ function ModalDecisao({ inscricao, tipo, nomeFuncao, onFechar, onPronto }) {
 
           <div style={{ display: "flex", gap: 8, marginBottom: 12, alignItems: "center", flexWrap: "wrap" }}>
             {[["email", "E-mail"], ["whatsapp", "WhatsApp"]].map(([id, nome]) => (
-              <button key={id} className={"pill pill-pick" + (canal === id ? " pill-on" : "")} style={{ padding: "9px 15px" }} onClick={() => setCanal(id)}>
+              <button
+                key={id}
+                className={"pill pill-pick" + (canal === id ? " pill-on" : "")}
+                style={{ padding: "9px 14px" }}
+                onClick={() => setCanal(id)}
+              >
                 {nome}
               </button>
             ))}
@@ -195,7 +220,7 @@ Sua inscrição no Ministério de Multimídia foi aprovada. Que alegria ter voc�
 Função: ${i.funcoes.map(nomeFuncao).join(", ")}
 Primeiro treinamento: sábado, às 15h, na sala de mídia
 
-Seu acesso ao sistema de escalas está liberado. Você vai receber o link para criar sua senha.
+Seu acesso já está liberado. Entre com o e-mail e a senha que você criou na inscrição.
 
 Qualquer dúvida, é só responder esta mensagem.
 Ministério de Multimídia`;

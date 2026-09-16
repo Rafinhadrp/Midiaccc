@@ -328,3 +328,138 @@ html, body { margin: 0; padding: 0; }
   .mm .tab { font-size: 10px; }
   .mm .tab .ico { font-size: 15px; }
 }
+
+/* ============================================================
+   v3 — cole no FINAL de app/globals.css
+   Botões menos arredondados, menu de três pontos, campo de senha
+   com olho, popups e acabamento geral.
+   ============================================================ */
+
+.mm {
+  --r-btn: 8px;
+  --sombra-flutuante: 0 8px 24px rgba(15,16,21,.10), 0 2px 6px rgba(15,16,21,.06);
+}
+
+/* ---- botões: cantos de 8px no lugar da pílula ---- */
+.mm .btn { border-radius: var(--r-btn); padding: 9px 15px; }
+.mm .btn-sm { padding: 6px 11px; border-radius: 7px; }
+.mm .btn-bloco { width: 100%; justify-content: center; }
+
+/* botão só com ícone */
+.mm .btn-ico {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; padding: 0; border-radius: 7px;
+  border: 1px solid transparent; background: transparent; color: var(--muted);
+}
+.mm .btn-ico:hover { background: var(--off-bg); color: var(--text); }
+
+/* botão com ícone + texto */
+.mm .btn-linha { display: inline-flex; align-items: center; gap: 7px; }
+
+/* ---- pílulas de escolha também ficam menos redondas ---- */
+.mm .pill-pick { border-radius: var(--r-btn); }
+.mm .pill { gap: 6px; }
+
+/* ---- etiqueta de função com ícone ---- */
+.mm .fn-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 10px; border-radius: 7px; font-size: 12.5px; font-weight: 600;
+  background: var(--off-bg); color: var(--ink-soft);
+}
+.mm .fn-ico { display: inline-flex; align-items: center; justify-content: center; }
+
+/* ---- menu de três pontos ---- */
+.mm .menu-wrap { position: relative; }
+.mm .menu {
+  position: absolute; right: 0; top: calc(100% + 6px); z-index: 40;
+  min-width: 208px; background: var(--card); border: 1px solid var(--line);
+  border-radius: 12px; box-shadow: var(--sombra-flutuante); padding: 5px;
+}
+.mm .menu-item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 9px 11px; border: 0; background: transparent; color: var(--text);
+  border-radius: 7px; text-align: left; font-size: 13.5px; font-weight: 500;
+}
+.mm .menu-item:hover { background: var(--off-bg); }
+.mm .menu-item.perigo { color: #B42318; }
+.mm .menu-item.perigo:hover { background: #FDECEA; }
+.mm .menu-sep { height: 1px; background: var(--line-2); margin: 5px 0; }
+.mm .menu-titulo {
+  padding: 8px 11px 5px; font-size: 11.5px; font-weight: 700;
+  color: var(--muted); letter-spacing: .02em;
+}
+
+/* ---- campo de senha com o olho ---- */
+.mm .senha-wrap { position: relative; }
+.mm .senha-wrap input { padding-right: 46px; }
+.mm .senha-olho {
+  position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+  width: 32px; height: 32px; border: 0; background: transparent; color: var(--muted);
+  display: flex; align-items: center; justify-content: center; border-radius: 7px;
+}
+.mm .senha-olho:hover { background: var(--off-bg); color: var(--text); }
+
+/* força da senha */
+.mm .forca { display: flex; gap: 4px; margin-top: 7px; }
+.mm .forca i { flex: 1; height: 3px; border-radius: 2px; background: var(--line); }
+.mm .forca i.on-1 { background: #E0574A; }
+.mm .forca i.on-2 { background: var(--wait); }
+.mm .forca i.on-3 { background: var(--go); }
+
+/* ---- rodapé de link nas telas escuras ---- */
+.mm .rodape-escuro {
+  margin-top: 20px; text-align: center; font-size: 13.5px; color: #8E91A3;
+}
+.mm .rodape-escuro a { color: #fff; font-weight: 600; text-decoration: none; }
+.mm .rodape-escuro a:hover { text-decoration: underline; }
+
+/* ---- abas internas ---- */
+.mm .abas { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+.mm .aba {
+  border: 0; background: transparent; color: var(--muted); font-weight: 600;
+  font-size: 14px; padding: 10px 14px; border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.mm .aba:hover { color: var(--text); }
+.mm .aba.on { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ---- linha com ação à direita ---- */
+.mm .linha-acao { display: flex; align-items: center; gap: 12px; }
+.mm .linha-acao .cresce { flex: 1; min-width: 0; }
+
+/* ---- área de perigo ---- */
+.mm .perigo-card { border-color: #F3C9C4; }
+.mm .perigo-card h3 { color: #B42318; }
+
+/* ---- navegação com ícone SVG ---- */
+.mm .navitem .ico, .mm .tab .ico {
+  display: flex; align-items: center; justify-content: center; width: 20px;
+}
+.mm .tab .ico { width: auto; }
+
+/* avatar na aba de perfil do celular */
+.mm .tab .av { margin-bottom: 1px; }
+.mm .tab.on .av { box-shadow: 0 0 0 2px rgba(255,255,255,.9); }
+
+/* ---- logo da marca ---- */
+.mm .brand .mark { width: 42px; height: 42px; border-radius: 12px; }
+.mm .brand .mark::after { display: none; }
+
+/* ---- diálogo de confirmação ---- */
+.mm .confirma { max-width: 420px; }
+.mm .confirma .modal-head { padding-bottom: 8px; }
+.mm .confirma-ico {
+  width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: #FDECEA; color: #B42318;
+}
+
+/* ---- tabelas e listas: respiro ---- */
+.mm .item-actions { gap: 7px; }
+.mm .vazio-linha { padding: 26px 20px; text-align: center; color: var(--muted); font-size: 13.5px; }
+
+@media (max-width: 880px) {
+  .mm .menu { right: 0; min-width: 190px; }
+  .mm .abas { overflow-x: auto; }
+  .mm .item-actions .btn { flex: 0 1 auto; }
+}

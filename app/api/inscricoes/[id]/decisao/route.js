@@ -10,7 +10,10 @@ import {
 
 /**
  * Aprova ou recusa uma inscrição e dispara a mensagem.
- * Ao aprovar: cria o usuário, o perfil, as funções e manda o convite.
+ *
+ * A conta já existe desde a inscrição, com a senha que a pessoa
+ * escolheu. Aprovar cria o perfil, que é o que libera o painel.
+ * Recusar apaga a conta que ficou sem uso.
  */
 export async function POST(req, { params }) {
   const { id } = await params;
@@ -40,17 +43,14 @@ export async function POST(req, { params }) {
     (f) => listaFuncoes?.find((x) => x.id === f)?.nome ?? f
   );
 
-  // ---- cria acesso quando aprovado ----
-  let linkAcesso = `${process.env.NEXT_PUBLIC_SITE_URL}/login`;
+  const linkAcesso = `${process.env.NEXT_PUBLIC_SITE_URL}/login`;
   let avisoAcesso = null;
 
   if (decisao === "aprovado") {
-    const criado = await criarAcesso(admin, insc);
-    if (criado.erro) avisoAcesso = criado.erro;
-    if (criado.link) linkAcesso = criado.link;
+    const r = await liberarAcesso(admin, insc);
+    if (r.erro) avisoAcesso = r.erro;
   }
 
-  // ---- atualiza a inscrição ----
   const { error: erroUpdate } = await supabase
     .from("inscricoes")
     .update({ status: decisao, decidido_por: perfil.id, decidido_em: new Date().toISOString() })
@@ -60,7 +60,11 @@ export async function POST(req, { params }) {
     return NextResponse.json({ erro: "Não foi possível atualizar a inscrição." }, { status: 500 });
   }
 
-  // ---- monta e envia a mensagem ----
+  // Recusado: a conta criada na inscrição não serve para nada
+  if (decisao === "recusado" && insc.user_id) {
+    await admin.auth.admin.deleteUser(insc.user_id).catch(() => {});
+  }
+
   const texto =
     textoPersonalizado?.trim() ||
     (decisao === "aprovado"
@@ -107,36 +111,33 @@ export async function POST(req, { params }) {
   });
 }
 
-/** Cria usuário + perfil + funções. Devolve o link para definir a senha. */
-async function criarAcesso(admin, insc) {
-  const { data: criado, error } = await admin.auth.admin.createUser({
-    email: insc.email,
-    email_confirm: true,
-    user_metadata: { nome: insc.nome },
-  });
+/** Cria o perfil e as funções. A conta e a senha já existem. */
+async function liberarAcesso(admin, insc) {
+  let userId = insc.user_id;
 
-  let userId = criado?.user?.id;
-
-  // Se já existia um usuário com esse e-mail, reaproveita
-  if (error && /already/i.test(error.message)) {
+  // Inscrições antigas, feitas antes da senha no formulário
+  if (!userId) {
     const { data: lista } = await admin.auth.admin.listUsers();
     userId = lista?.users?.find((u) => u.email === insc.email)?.id;
-  } else if (error) {
-    return { erro: `Usuário não criado: ${error.message}` };
+
+    if (!userId) {
+      const { data: criado, error } = await admin.auth.admin.createUser({
+        email: insc.email,
+        email_confirm: true,
+        user_metadata: { nome: insc.nome },
+      });
+      if (error) return { erro: `Conta não criada: ${error.message}` };
+      userId = criado?.user?.id;
+    }
   }
 
-  if (!userId) return { erro: "Não foi possível identificar o usuário criado." };
+  if (!userId) return { erro: "Não foi possível identificar a conta." };
 
-  // Quem já tem perfil mantém tudo como está — papel, foto e dados.
-  // Sem isso, um membro antigo que se inscrevesse de novo seria rebaixado.
   const { data: existente } = await admin
-    .from("perfis")
-    .select("id")
-    .eq("id", userId)
-    .maybeSingle();
+    .from("perfis").select("id").eq("id", userId).maybeSingle();
 
   if (!existente) {
-    const { error: erroPerfil } = await admin.from("perfis").insert({
+    const { error } = await admin.from("perfis").insert({
       id: userId,
       nome: insc.nome,
       email: insc.email,
@@ -144,23 +145,14 @@ async function criarAcesso(admin, insc) {
       foto_url: insc.foto_url,
       papel_id: "voluntario",
     });
-    if (erroPerfil) return { erro: `Perfil não criado: ${erroPerfil.message}` };
+    if (error) return { erro: `Perfil não criado: ${error.message}` };
   }
 
-  // As funções continuam sendo somadas: se a pessoa se inscreveu para
-  // aprender uma função nova, ela se junta às que já tinha.
   if (insc.funcoes?.length) {
     await admin
       .from("perfil_funcoes")
       .upsert(insc.funcoes.map((f) => ({ perfil_id: userId, funcao_id: f })));
   }
 
-  // Link de convite para a pessoa criar a própria senha
-  const { data: linkData } = await admin.auth.admin.generateLink({
-    type: "recovery",
-    email: insc.email,
-    options: { redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/redefinir-senha` },
-  });
-
-  return { link: linkData?.properties?.action_link ?? null };
+  return { ok: true };
 }

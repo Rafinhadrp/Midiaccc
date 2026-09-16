@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import FormInscricao from "@/components/FormInscricao";
 
@@ -6,7 +7,7 @@ export const dynamic = "force-dynamic";
 export default async function Inscrever() {
   const { data: funcoes } = await supabaseAdmin()
     .from("funcoes")
-    .select("id, nome, cor")
+    .select("id, nome, cor, icone")
     .order("ordem");
 
   return (
@@ -18,8 +19,13 @@ export default async function Inscrever() {
           Câmera, som, projeção, transmissão e fotografia. Não precisa saber nada ainda —
           a gente treina você do zero.
         </p>
+
         <div className="pub-card">
           <FormInscricao funcoes={funcoes ?? []} />
+        </div>
+
+        <div className="rodape-escuro">
+          Já faz parte da equipe? <Link href="/login">Entrar</Link>
         </div>
       </div>
     </div>

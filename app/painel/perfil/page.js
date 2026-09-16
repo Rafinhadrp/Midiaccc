@@ -14,7 +14,7 @@ export default async function PaginaPerfil() {
 
   return (
     <>
-      <Topo titulo="Meu perfil" sub="Seus dados e sua senha" />
+      <Topo titulo="Meu perfil" sub="Seus dados, sua senha e sua conta" />
       <div className="content">
         <FormPerfil
           perfil={{

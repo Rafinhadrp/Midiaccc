@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Avatar from "./Avatar";
+import Icone from "./Icones";
 import { supabaseNavegador } from "@/lib/supabase/cliente";
 
 export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeEditar, meuId }) {
@@ -14,7 +15,6 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
     const supabase = supabaseNavegador();
     setErro(null);
 
-    // guarda o estado anterior para desfazer se o banco recusar
     const anterior = eventos;
     setEventos((lista) =>
       lista.map((ev) =>
@@ -36,15 +36,14 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
   }
 
   async function confirmarPresenca(escalacaoId, status) {
-    const supabase = supabaseNavegador();
-    const { error } = await supabase.from("escalacoes").update({ status }).eq("id", escalacaoId);
+    const { error } = await supabaseNavegador()
+      .from("escalacoes").update({ status }).eq("id", escalacaoId);
     if (error) setErro(error.message);
     else router.refresh();
   }
 
   async function criarEvento(dados) {
-    const supabase = supabaseNavegador();
-    const { error } = await supabase.from("eventos").insert(dados);
+    const { error } = await supabaseNavegador().from("eventos").insert(dados);
     if (error) setErro(error.message);
     else { setNovo(false); router.refresh(); }
   }
@@ -56,13 +55,16 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
       {eventos.length === 0 && !novo && (
         <div className="card empty">
           <div style={{ fontWeight: 600, color: "var(--text)" }}>Nenhum culto programado</div>
-          <div className="small" style={{ marginTop: 5 }}>Cadastre o próximo culto para montar a equipe.</div>
+          <div className="small" style={{ marginTop: 6 }}>
+            Cadastre o próximo culto para montar a equipe.
+          </div>
         </div>
       )}
 
       {eventos.map((ev) => {
         const preenchidas = funcoes.filter((f) => achar(ev.escalacoes, f.id)?.perfil_id);
         const faltando = funcoes.length - preenchidas.length;
+
         return (
           <div className="card block" key={ev.id} style={{ marginTop: 14 }}>
             <div className="ev-head">
@@ -70,6 +72,7 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
                 <div className="d">{ev.data.slice(8, 10)}</div>
                 <div className="w">{diaCurto(ev.data)}</div>
               </div>
+
               <div style={{ flex: 1, minWidth: 0 }}>
                 <h3 style={{ fontSize: 16.5 }}>{ev.titulo}</h3>
                 <div className="small muted" style={{ marginTop: 2 }}>
@@ -82,8 +85,10 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
                   })}
                 </div>
               </div>
+
               <span className={"pill pill-" + (faltando ? "wait" : "go")}>
-                <span className="dot" />{faltando ? `${faltando} em aberto` : "completa"}
+                <span className="dot" />
+                {faltando ? `${faltando} em aberto` : "completa"}
               </span>
             </div>
 
@@ -96,9 +101,12 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
               return (
                 <div className="assign" key={f.id}>
                   <div className="fn">
-                    <span className="fdot" style={{ background: f.cor }} />
+                    <span className="fn-ico" style={{ color: f.cor }}>
+                      <Icone nome={f.icone} size={16} />
+                    </span>
                     {f.nome}
                   </div>
+
                   {pessoa && <Avatar nome={pessoa.nome} foto={pessoa.foto_url} size={28} />}
 
                   {podeEditar ? (
@@ -110,7 +118,9 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
                       {aptos.map((m) => <option key={m.id} value={m.id}>{m.nome}</option>)}
                     </select>
                   ) : (
-                    <div style={{ flex: 1 }}>{pessoa?.nome ?? <span className="muted">ninguém escalado</span>}</div>
+                    <div style={{ flex: 1 }}>
+                      {pessoa?.nome ?? <span className="muted">ninguém escalado</span>}
+                    </div>
                   )}
 
                   {souEu && esc?.status === "aguardando" ? (
@@ -126,16 +136,28 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
                 </div>
               );
             })}
+
+            {aptosFaltando(funcoes, membros).length > 0 && podeEditar && (
+              <div className="vazio-linha" style={{ textAlign: "left", paddingTop: 14 }}>
+                Sem ninguém apto para: {aptosFaltando(funcoes, membros).map((f) => f.nome).join(", ")}.
+                Defina as funções da equipe em Membros.
+              </div>
+            )}
           </div>
         );
       })}
 
-      {podeEditar && (novo
-        ? <FormEvento onSalvar={criarEvento} onCancelar={() => setNovo(false)} />
-        : <button className="btn btn-primary" style={{ width: "100%", marginTop: 16, padding: 13 }} onClick={() => setNovo(true)}>
-            Adicionar culto
-          </button>
-      )}
+      {podeEditar && (novo ? (
+        <FormEvento onSalvar={criarEvento} onCancelar={() => setNovo(false)} />
+      ) : (
+        <button
+          className="btn btn-primary btn-bloco btn-linha"
+          style={{ marginTop: 16, padding: 13 }}
+          onClick={() => setNovo(true)}
+        >
+          <Icone nome="mais" size={16} /> Adicionar culto
+        </button>
+      ))}
     </>
   );
 }
@@ -147,21 +169,24 @@ function FormEvento({ onSalvar, onCancelar }) {
 
   return (
     <div className="card" style={{ padding: 20, marginTop: 16 }}>
-      <h3 style={{ fontSize: 16.5, marginBottom: 14 }}>Novo culto</h3>
+      <h3 style={{ fontSize: 16.5, marginBottom: 16 }}>Novo culto</h3>
+
       <label className="field">
         <span>Nome</span>
         <input value={titulo} onChange={(e) => setTitulo(e.target.value)} />
       </label>
+
       <div style={{ display: "flex", gap: 12 }}>
         <label className="field" style={{ flex: 1 }}>
           <span>Data</span>
           <input type="date" value={data} onChange={(e) => setData(e.target.value)} />
         </label>
-        <label className="field" style={{ width: 130 }}>
+        <label className="field" style={{ width: 140 }}>
           <span>Horário</span>
           <input type="time" value={hora} onChange={(e) => setHora(e.target.value)} />
         </label>
       </div>
+
       <div style={{ display: "flex", gap: 9, justifyContent: "flex-end" }}>
         <button className="btn" onClick={onCancelar}>Cancelar</button>
         <button className="btn btn-primary" disabled={!data} onClick={() => onSalvar({ titulo, data, hora })}>
@@ -177,7 +202,15 @@ const achar = (lista, funcaoId) => (lista ?? []).find((e) => e.funcao_id === fun
 function trocar(lista, funcaoId, perfilId) {
   const resto = (lista ?? []).filter((e) => e.funcao_id !== funcaoId);
   const antigo = achar(lista, funcaoId);
-  return [...resto, { ...(antigo ?? {}), funcao_id: funcaoId, perfil_id: perfilId || null, status: "aguardando" }];
+  return [
+    ...resto,
+    { ...(antigo ?? {}), funcao_id: funcaoId, perfil_id: perfilId || null, status: "aguardando" },
+  ];
+}
+
+/** Funções para as quais ninguém do time está habilitado. */
+function aptosFaltando(funcoes, membros) {
+  return funcoes.filter((f) => !membros.some((m) => m.funcoes.includes(f.id)));
 }
 
 function diaCurto(iso) {

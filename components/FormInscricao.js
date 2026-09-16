@@ -1,6 +1,9 @@
 "use client";
 import { useRef, useState } from "react";
+import Link from "next/link";
 import Avatar from "./Avatar";
+import Icone from "./Icones";
+import CampoSenha from "./CampoSenha";
 
 export default function FormInscricao({ funcoes }) {
   const fileRef = useRef(null);
@@ -8,11 +11,18 @@ export default function FormInscricao({ funcoes }) {
     nome: "", idade: "", telefone: "", email: "",
     funcoes: [], experiencia: "", disponibilidade: "", foto: null,
   });
+  const [senha, setSenha] = useState("");
+  const [confirma, setConfirma] = useState("");
   const [erro, setErro] = useState(null);
   const [ocupado, setOcupado] = useState(false);
   const [pronto, setPronto] = useState(false);
 
-  const valido = f.nome.trim() && f.telefone.trim() && f.email.trim() && f.funcoes.length > 0;
+  const senhaCurta = senha.length > 0 && senha.length < 8;
+  const senhasDiferentes = confirma.length > 0 && senha !== confirma;
+
+  const valido =
+    f.nome.trim() && f.telefone.trim() && f.email.trim() &&
+    f.funcoes.length > 0 && senha.length >= 8 && senha === confirma;
 
   function escolherFoto(e) {
     const file = e.target.files?.[0];
@@ -37,7 +47,7 @@ export default function FormInscricao({ funcoes }) {
       const r = await fetch("/api/inscricoes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(f),
+        body: JSON.stringify({ ...f, senha }),
       });
       const dados = await r.json();
       if (!r.ok) { setErro(dados.erro || "Não deu para enviar. Tente de novo."); setOcupado(false); return; }
@@ -51,11 +61,13 @@ export default function FormInscricao({ funcoes }) {
   if (pronto) {
     return (
       <div className="done">
-        <div className="mark">✓</div>
+        <div className="mark"><Icone nome="cheque" size={24} strokeWidth={2.2} /></div>
         <h3 style={{ fontSize: 21 }}>Inscrição recebida</h3>
-        <p className="small muted" style={{ marginTop: 9 }}>
-          A liderança responde em até uma semana, pelo WhatsApp que você informou.
+        <p className="small muted" style={{ marginTop: 10, marginBottom: 20 }}>
+          Sua conta já está criada. Assim que a liderança aprovar, você entra
+          com o e-mail e a senha que acabou de escolher.
         </p>
+        <Link className="btn" href="/login">Ir para o login</Link>
       </div>
     );
   }
@@ -67,7 +79,9 @@ export default function FormInscricao({ funcoes }) {
       <div className="photo-pick">
         <button className="av-edit" onClick={() => fileRef.current?.click()} aria-label="Escolher foto de perfil">
           <Avatar nome={f.nome || "?"} foto={f.foto} size={62} />
-          <span className="cam" aria-hidden="true">✎</span>
+          <span className="cam" aria-hidden="true">
+            <Icone nome="editar" size={11} strokeWidth={2} />
+          </span>
         </button>
         <input ref={fileRef} type="file" accept="image/*" style={{ display: "none" }} onChange={escolherFoto} />
         <div>
@@ -94,8 +108,43 @@ export default function FormInscricao({ funcoes }) {
 
       <label className="field">
         <span>E-mail</span>
-        <input value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} inputMode="email" placeholder="voce@email.com" />
+        <input
+          value={f.email}
+          onChange={(e) => setF({ ...f, email: e.target.value })}
+          inputMode="email"
+          autoComplete="email"
+          placeholder="voce@email.com"
+        />
       </label>
+
+      <div className="divider" style={{ margin: "22px 0 18px" }} />
+
+      <div style={{ marginBottom: 14 }}>
+        <div style={{ fontWeight: 700, fontSize: 15 }}>Crie sua senha</div>
+        <div className="small muted" style={{ marginTop: 3 }}>
+          É com ela que você vai entrar quando a inscrição for aprovada.
+        </div>
+      </div>
+
+      <CampoSenha
+        rotulo="Senha"
+        valor={senha}
+        onChange={setSenha}
+        autoComplete="new-password"
+        forca
+        erro={senhaCurta ? "Faltam pelo menos 8 caracteres." : null}
+        ajuda="Mínimo de 8 caracteres."
+      />
+
+      <CampoSenha
+        rotulo="Repita a senha"
+        valor={confirma}
+        onChange={setConfirma}
+        autoComplete="new-password"
+        erro={senhasDiferentes ? "As duas senhas não são iguais." : null}
+      />
+
+      <div className="divider" style={{ margin: "22px 0 18px" }} />
 
       <div className="field">
         <span>Onde você quer servir</span>
@@ -104,10 +153,12 @@ export default function FormInscricao({ funcoes }) {
             <button
               key={fn.id}
               className={"pill pill-pick" + (f.funcoes.includes(fn.id) ? " pill-on" : "")}
-              style={{ padding: "9px 14px" }}
+              style={{ padding: "9px 13px" }}
               onClick={() => alternar(fn.id)}
             >
-              <span className="fdot" style={{ background: fn.cor }} />
+              <span className="fn-ico" style={{ color: f.funcoes.includes(fn.id) ? "#fff" : fn.cor }}>
+                <Icone nome={fn.icone} size={15} />
+              </span>
               {fn.nome}
             </button>
           ))}
@@ -125,13 +176,18 @@ export default function FormInscricao({ funcoes }) {
 
       <label className="field">
         <span>Quais dias você pode servir</span>
-        <input value={f.disponibilidade} onChange={(e) => setF({ ...f, disponibilidade: e.target.value })} placeholder="Domingo de manhã, quarta à noite..." />
+        <input
+          value={f.disponibilidade}
+          onChange={(e) => setF({ ...f, disponibilidade: e.target.value })}
+          placeholder="Domingo de manhã, quarta à noite..."
+        />
       </label>
 
-      <button className="btn btn-primary" style={{ width: "100%", padding: 14 }} onClick={enviar} disabled={!valido || ocupado}>
+      <button className="btn btn-primary btn-bloco" style={{ padding: 13 }} onClick={enviar} disabled={!valido || ocupado}>
         {ocupado ? "Enviando..." : "Enviar inscrição"}
       </button>
-      <div className="small muted" style={{ marginTop: 12, textAlign: "center" }}>
+
+      <div className="small muted" style={{ marginTop: 14, textAlign: "center" }}>
         Seus dados ficam só com a liderança do ministério.
       </div>
     </>

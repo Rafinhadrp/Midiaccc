@@ -14,7 +14,7 @@ export default async function PaginaMembros() {
   const [{ data: membros }, { data: funcoes }, { data: papeis }] = await Promise.all([
     supabase.from("perfis").select("*, perfil_funcoes(funcao_id)").order("nome"),
     supabase.from("funcoes").select("*").order("ordem"),
-    supabase.from("papeis").select("*"),
+    supabase.from("papeis").select("*").order("nome"),
   ]);
 
   return (

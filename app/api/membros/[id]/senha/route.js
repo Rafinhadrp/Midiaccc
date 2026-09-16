@@ -25,10 +25,7 @@ export async function POST(req, { params }) {
   const admin = supabaseAdmin();
 
   const { data: alvo } = await admin
-    .from("perfis")
-    .select("id, nome, email")
-    .eq("id", id)
-    .single();
+    .from("perfis").select("id, nome, email").eq("id", id).single();
 
   if (!alvo) return NextResponse.json({ erro: "Membro não encontrado" }, { status: 404 });
 
@@ -62,7 +59,7 @@ export async function POST(req, { params }) {
   const { data: linkData, error: erroLink } = await admin.auth.admin.generateLink({
     type: "recovery",
     email: alvo.email,
-      options: { redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/redefinir-senha` },
+    options: { redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/recuperar` },
   });
 
   if (erroLink) {

@@ -2,16 +2,18 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import AvatarUpload from "./AvatarUpload";
+import Avatar from "./Avatar";
+import Icone from "./Icones";
 import { supabaseNavegador } from "@/lib/supabase/cliente";
 
 const ABAS = [
-  { href: "/painel",            nome: "Painel",     ico: "◧", perm: null },
-  { href: "/painel/inscricoes", nome: "Inscrições", ico: "✎", perm: "inscricoes:ver" },
-  { href: "/painel/escalas",    nome: "Escalas",    ico: "▦", perm: "escalas:ver" },
-  { href: "/painel/membros",    nome: "Membros",    ico: "◉", perm: "membros:ver" },
-  { href: "/painel/acessos",    nome: "Acessos",    ico: "⚿", perm: "acessos:gerenciar" },
+  { href: "/painel",            nome: "Painel",     ico: "painel",     perm: null },
+  { href: "/painel/inscricoes", nome: "Inscrições", ico: "inscricoes", perm: "inscricoes:ver" },
+  { href: "/painel/escalas",    nome: "Escalas",    ico: "escalas",    perm: "escalas:ver" },
+  { href: "/painel/membros",    nome: "Membros",    ico: "membros",    perm: "membros:ver" },
+  { href: "/painel/acessos",    nome: "Acessos",    ico: "acessos",    perm: "acessos:gerenciar" },
   // No computador o perfil fica no cartão do rodapé; no celular vira aba.
-  { href: "/painel/perfil",     nome: "Perfil",     ico: "☺", perm: null, soMobile: true },
+  { href: "/painel/perfil",     nome: "Perfil",     ico: "perfil",     perm: null, soMobile: true },
 ];
 
 export default function Shell({ perfil, children }) {
@@ -42,6 +44,7 @@ export default function Shell({ perfil, children }) {
               <p>Ministério de Multimídia</p>
             </div>
           </div>
+
           <nav>
             {abas.filter((a) => !a.soMobile).map((a) => (
               <Link
@@ -49,11 +52,12 @@ export default function Shell({ perfil, children }) {
                 href={a.href}
                 className={"navitem" + (caminho === a.href ? " on" : "")}
               >
-                <span className="ico" aria-hidden="true">{a.ico}</span>
+                <span className="ico"><Icone nome={a.ico} size={18} /></span>
                 {a.nome}
               </Link>
             ))}
           </nav>
+
           <div className="rail-foot">
             <div className={"me" + (caminho === "/painel/perfil" ? " me-on" : "")}>
               <AvatarUpload
@@ -68,7 +72,9 @@ export default function Shell({ perfil, children }) {
                 <div className="role">{perfil.papelNome}</div>
               </Link>
             </div>
-            <button className="linkout" onClick={sair}>Sair da conta</button>
+            <button className="linkout btn-linha" style={{ justifyContent: "center" }} onClick={sair}>
+              <Icone nome="sair" size={15} /> Sair da conta
+            </button>
           </div>
         </aside>
 
@@ -78,7 +84,13 @@ export default function Shell({ perfil, children }) {
       <nav className="tabbar">
         {abas.map((a) => (
           <Link key={a.href} href={a.href} className={"tab" + (caminho === a.href ? " on" : "")}>
-            <span className="ico" aria-hidden="true">{a.ico}</span>
+            <span className="ico">
+              {a.href === "/painel/perfil" ? (
+                <Avatar nome={perfil.nome} foto={perfil.foto_url} size={19} />
+              ) : (
+                <Icone nome={a.ico} size={18} />
+              )}
+            </span>
             {a.nome}
           </Link>
         ))}
