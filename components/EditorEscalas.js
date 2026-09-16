@@ -20,6 +20,16 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
   const [erro, setErro] = useState(null);
   const [excluindo, setExcluindo] = useState(null);
 
+  // Quando o servidor manda dados novos, a lista se refaz sozinha.
+  // Sem isto, confirmar presença ou salvar só aparecia depois de
+  // recarregar a página no navegador.
+  const assinaturaServidor = JSON.stringify(eventosIniciais);
+  const [assinaturaVista, setAssinaturaVista] = useState(assinaturaServidor);
+  if (assinaturaVista !== assinaturaServidor) {
+    setAssinaturaVista(assinaturaServidor);
+    setEventos(eventosIniciais.map(paraRascunho));
+  }
+
   function novoCulto() {
     setNovo({
       id: null,
@@ -29,7 +39,8 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
       hora: "19:00",
       observacao: "",
       escala: {},
-      editando: true,
+      statusOriginal: {},
+      escalacaoIds: {},
     });
   }
 
@@ -67,24 +78,27 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
     funcoes.forEach((f) => {
       const perfilId = rascunho.escala[f.id];
       if (perfilId) {
+        const continuaOMesmo = rascunho.original?.[f.id] === perfilId;
         preencher.push({
           evento_id: eventoId,
           funcao_id: f.id,
           perfil_id: perfilId,
-          status: rascunho.statusOriginal?.[f.id] && rascunho.original?.[f.id] === perfilId
-            ? rascunho.statusOriginal[f.id]
-            : "aguardando",
+          status: continuaOMesmo ? (rascunho.statusOriginal?.[f.id] ?? "aguardando") : "aguardando",
         });
       } else {
         esvaziar.push(f.id);
       }
     });
 
+    let escalacoesSalvas = [];
+
     if (preencher.length) {
-      const { error } = await supabase
+      const { data: retorno, error } = await supabase
         .from("escalacoes")
-        .upsert(preencher, { onConflict: "evento_id,funcao_id" });
+        .upsert(preencher, { onConflict: "evento_id,funcao_id" })
+        .select("id, funcao_id, perfil_id, status");
       if (error) return { erro: "Escala não salva: " + error.message };
+      escalacoesSalvas = retorno ?? [];
     }
 
     if (esvaziar.length && !ehNovo) {
@@ -94,6 +108,18 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
         .eq("evento_id", eventoId)
         .in("funcao_id", esvaziar);
     }
+
+    // Atualiza a tela na hora, sem esperar o servidor responder
+    const atualizado = paraRascunho({
+      id: eventoId,
+      ...campos,
+      escalacoes: escalacoesSalvas,
+    });
+
+    setEventos((lista) => {
+      const semEle = lista.filter((x) => x.id !== eventoId);
+      return [...semEle, atualizado].sort(porData);
+    });
 
     setNovo(null);
     router.refresh();
@@ -127,7 +153,10 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
     if (error) {
       setEventos(anterior);
       setErro("Não deu para confirmar: " + error.message);
+      return;
     }
+
+    router.refresh();
   }
 
   return (
@@ -135,7 +164,11 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
       {erro && <div className="aviso aviso-erro">{erro}</div>}
 
       {podeEditar && !novo && (
-        <button className="btn btn-primary btn-bloco btn-linha" style={{ padding: 12, marginBottom: 16 }} onClick={novoCulto}>
+        <button
+          className="btn btn-primary btn-bloco btn-linha"
+          style={{ padding: 12, marginBottom: 16 }}
+          onClick={novoCulto}
+        >
           <Icone nome="mais" size={16} /> Novo culto
         </button>
       )}
@@ -157,7 +190,9 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
         <div className="card empty">
           <div style={{ fontWeight: 600, color: "var(--text)" }}>Nenhum culto programado</div>
           <div className="small" style={{ marginTop: 6 }}>
-            {podeEditar ? "Crie o próximo culto para montar a equipe." : "A liderança ainda não montou as próximas escalas."}
+            {podeEditar
+              ? "Crie o próximo culto para montar a equipe."
+              : "A liderança ainda não montou as próximas escalas."}
           </div>
         </div>
       )}
@@ -202,10 +237,13 @@ function CartaoCulto({
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState(null);
 
-  // Mantém o cartão em dia quando o servidor manda dados novos
-  const idAtual = rascunho.id;
-  const [idVisto, setIdVisto] = useState(idAtual);
-  if (idVisto !== idAtual) { setIdVisto(idAtual); setD(rascunho); }
+  // Enquanto não estiver editando, o cartão segue o que veio de fora.
+  // É isto que faz a confirmação de presença aparecer na hora.
+  const [vistoDeFora, setVistoDeFora] = useState(rascunho);
+  if (!editando && vistoDeFora !== rascunho) {
+    setVistoDeFora(rascunho);
+    setD(rascunho);
+  }
 
   const escalados = funcoes.filter((f) => d.escala[f.id]);
   const faltando = funcoes.length - escalados.length;
@@ -234,7 +272,6 @@ function CartaoCulto({
         {editando ? (
           <div className="ev-data-edit">
             <input
-              className="campo-dia"
               value={d.dia}
               onChange={(e) => setD({ ...d, dia: soNumeros(e.target.value, 2) })}
               placeholder="20"
@@ -243,7 +280,6 @@ function CartaoCulto({
             />
             <span className="barra">/</span>
             <input
-              className="campo-mes"
               value={d.mes}
               onChange={(e) => setD({ ...d, mes: soNumeros(e.target.value, 2) })}
               placeholder="09"
@@ -374,7 +410,7 @@ function CartaoCulto({
             )}
 
             {!editando && (
-              souEu && status === "aguardando" ? (
+              souEu && status !== "confirmado" && escalacaoId ? (
                 <button
                   className="btn btn-sm btn-go"
                   onClick={() => onConfirmar?.(d.id, f.id, escalacaoId, "confirmado")}
@@ -433,7 +469,7 @@ function paraRascunho(ev) {
     titulo: ev.titulo,
     dia: ev.data.slice(8, 10),
     mes: ev.data.slice(5, 7),
-    hora: ev.hora?.slice(0, 5) ?? "18:30",
+    hora: ev.hora?.slice(0, 5) ?? "19:00",
     observacao: ev.observacao ?? "",
     escala,
     original: { ...escala },
@@ -442,10 +478,15 @@ function paraRascunho(ev) {
   };
 }
 
+const porData = (a, b) => {
+  const chave = (x) => `${x.mes}${x.dia}${x.hora}`;
+  return chave(a).localeCompare(chave(b));
+};
+
 /**
  * Monta a data a partir de dia e mês. O ano é deduzido: se a data
  * já passou neste ano, assume o ano que vem. Assim ninguém precisa
- * digitar 2026 para marcar o culto de domingo.
+ * digitar o ano para marcar o culto de domingo.
  */
 function montarData(dia, mes) {
   const d = Number(dia), m = Number(mes);
@@ -456,7 +497,6 @@ function montarData(dia, mes) {
 
   let ano = hoje.getFullYear();
   const tentativa = new Date(ano, m - 1, d);
-  // margem de um dia, para o culto de hoje continuar valendo
   if (tentativa < new Date(hoje.getTime() - 86400000)) ano++;
 
   return `${ano}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
