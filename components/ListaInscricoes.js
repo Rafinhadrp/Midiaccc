@@ -3,22 +3,39 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Avatar from "./Avatar";
 import Icone from "./Icones";
+import Menu from "./Menu";
+import Confirmar from "./Confirmar";
+import { supabaseNavegador } from "@/lib/supabase/cliente";
 
 export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
   const router = useRouter();
+  const [lista, setLista] = useState(inscricoes);
   const [filtro, setFiltro] = useState("pendente");
   const [aberta, setAberta] = useState(null);
   const [modal, setModal] = useState(null);
+  const [excluindo, setExcluindo] = useState(null);
+  const [erro, setErro] = useState(null);
 
   const acharFuncao = (id) => funcoes.find((f) => f.id === id);
   const nomeFuncao = (id) => acharFuncao(id)?.nome ?? id;
-  const lista = inscricoes.filter((i) => (filtro === "todas" ? true : i.status === filtro));
+  const visiveis = lista.filter((i) => (filtro === "todas" ? true : i.status === filtro));
 
   const contar = (status) =>
-    status === "todas" ? inscricoes.length : inscricoes.filter((i) => i.status === status).length;
+    status === "todas" ? lista.length : lista.filter((i) => i.status === status).length;
+
+  async function apagar(i) {
+    const { error } = await supabaseNavegador().from("inscricoes").delete().eq("id", i.id);
+    if (error) return { erro: error.message };
+    setLista((l) => l.filter((x) => x.id !== i.id));
+    setExcluindo(null);
+    router.refresh();
+    return {};
+  }
 
   return (
     <>
+      {erro && <div className="aviso aviso-erro">{erro}</div>}
+
       <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
         {[["pendente", "Pendentes"], ["aprovado", "Aprovadas"], ["recusado", "Recusadas"], ["todas", "Todas"]].map(
           ([id, nome]) => (
@@ -35,7 +52,7 @@ export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
       </div>
 
       <div className="card block" style={{ marginTop: 14 }}>
-        {lista.length === 0 && (
+        {visiveis.length === 0 && (
           <div className="empty">
             <div style={{ fontWeight: 600, color: "var(--text)" }}>Nada por aqui</div>
             <div className="small" style={{ marginTop: 6 }}>
@@ -44,32 +61,64 @@ export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
           </div>
         )}
 
-        {lista.map((i, idx) => (
+        {visiveis.map((i, idx) => (
           <div className="item" key={i.id} style={idx === 0 ? { borderTop: 0 } : undefined}>
             <div className="item-head">
               <Avatar nome={i.nome} foto={i.foto_url} size={46} />
 
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div className="item-name">{i.nome}</div>
-                <div className="item-meta">{i.idade ? `${i.idade} anos · ` : ""}{i.telefone}</div>
-                <div className="tags">
-                  {i.funcoes.map((id) => {
-                    const f = acharFuncao(id);
-                    return (
-                      <span className="fn-tag" key={id}>
-                        <span className="fn-ico" style={{ color: f?.cor ?? "#999" }}>
-                          <Icone nome={f?.icone ?? "ponto"} size={14} />
-                        </span>
-                        {nomeFuncao(id)}
-                      </span>
-                    );
-                  })}
+                <div className="item-name">
+                  {i.nome}
+                  {i.origem === "cadastro" && (
+                    <span className="pill pill-off" style={{ marginLeft: 8, padding: "2px 8px", fontSize: 11 }}>
+                      cadastro simples
+                    </span>
+                  )}
                 </div>
+                <div className="item-meta">{i.idade ? `${i.idade} anos · ` : ""}{i.telefone}</div>
+
+                {i.funcoes.length > 0 && (
+                  <div className="tags">
+                    {i.funcoes.map((id) => {
+                      const f = acharFuncao(id);
+                      return (
+                        <span className="fn-tag" key={id}>
+                          <span className="fn-ico" style={{ color: f?.cor ?? "#999" }}>
+                            <Icone nome={f?.icone ?? "ponto"} size={14} />
+                          </span>
+                          {nomeFuncao(id)}
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
-              <span className={"pill pill-" + (i.status === "pendente" ? "wait" : i.status === "aprovado" ? "go" : "off")}>
-                <span className="dot" />{i.status}
-              </span>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+                <span className={"pill pill-" + (i.status === "pendente" ? "wait" : i.status === "aprovado" ? "go" : "off")}>
+                  <span className="dot" />{i.status}
+                </span>
+
+                {podeDecidir && (
+                  <Menu
+                    rotulo={`Opções de ${i.nome}`}
+                    itens={[
+                      {
+                        nome: aberta === i.id ? "Fechar detalhes" : "Ver tudo",
+                        icone: "busca",
+                        onClick: () => setAberta(aberta === i.id ? null : i.id),
+                      },
+                      { separador: true },
+                      {
+                        nome: "Excluir inscrição",
+                        icone: "lixeira",
+                        perigo: true,
+                        onClick: () => setExcluindo(i),
+                      },
+                    ]}
+                  />
+                )}
+              </div>
             </div>
 
             {aberta === i.id && (
@@ -86,6 +135,16 @@ export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
                     <div className="small" style={{ marginTop: 2 }}>{v}</div>
                   </div>
                 ))}
+
+                {podeDecidir && (
+                  <button
+                    className="btn btn-sm btn-linha"
+                    style={{ color: "#B42318", borderColor: "#F3C9C4", marginTop: 4 }}
+                    onClick={() => setExcluindo(i)}
+                  >
+                    <Icone nome="lixeira" size={15} /> Excluir inscrição
+                  </button>
+                )}
               </div>
             )}
 
@@ -117,6 +176,20 @@ export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
           nomeFuncao={nomeFuncao}
           onFechar={() => setModal(null)}
           onPronto={() => { setModal(null); router.refresh(); }}
+        />
+      )}
+
+      {excluindo && (
+        <Confirmar
+          titulo={`Excluir a inscrição de ${excluindo.nome.split(" ")[0]}`}
+          descricao={
+            excluindo.status === "aprovado"
+              ? "Isso apaga só o registro da inscrição. A conta e o perfil da pessoa continuam ativos — para removê-los, use a aba Membros."
+              : "O registro some da lista. A conta criada na inscrição continua existindo até alguém removê-la."
+          }
+          rotuloBotao="Excluir inscrição"
+          onCancelar={() => setExcluindo(null)}
+          onConfirmar={() => apagar(excluindo)}
         />
       )}
     </>
@@ -212,22 +285,25 @@ function ModalDecisao({ inscricao, tipo, nomeFuncao, onFechar, onPronto }) {
 
 function padrao(i, tipo, nomeFuncao) {
   const primeiro = i.nome.split(" ")[0];
+  const funcoes = i.funcoes?.length ? i.funcoes.map(nomeFuncao).join(", ") : "a definir com a liderança";
+
   if (tipo === "aprovado") {
     return `Olá, ${primeiro}! Tudo bem?
 
 Sua inscrição no Ministério de Multimídia foi aprovada. Que alegria ter você com a gente.
 
-Função: ${i.funcoes.map(nomeFuncao).join(", ")}
+Função: ${funcoes}
 Primeiro treinamento: sábado, às 15h, na sala de mídia
 
-Seu acesso já está liberado. Entre com o e-mail e a senha que você criou na inscrição.
+Seu acesso já está liberado. Entre com o e-mail e a senha que você criou no cadastro.
 
 Qualquer dúvida, é só responder esta mensagem.
 Ministério de Multimídia`;
   }
+
   return `Olá, ${primeiro}! Tudo bem?
 
-Obrigado por se inscrever no Ministério de Multimídia. Nesse momento não temos vaga aberta para a função que você escolheu, mas guardamos seu cadastro.
+Obrigado por se inscrever no Ministério de Multimídia. Nesse momento não temos vaga aberta, mas guardamos seu cadastro.
 
 Assim que abrir uma nova turma, entramos em contato.
 

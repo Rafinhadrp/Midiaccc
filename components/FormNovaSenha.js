@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabaseNavegador } from "@/lib/supabase/cliente";
 import CampoSenha from "./CampoSenha";
+import Marca from "./Marca";
 import Icone from "./Icones";
 
 export default function FormNovaSenha({ nome, email }) {
@@ -24,10 +25,7 @@ export default function FormNovaSenha({ nome, email }) {
     const { error } = await supabaseNavegador().auth.updateUser({ password: senha });
     setOcupado(false);
 
-    if (error) {
-      setErro("Não deu para salvar: " + error.message);
-      return;
-    }
+    if (error) { setErro("Não deu para salvar: " + error.message); return; }
 
     setPronto(true);
     setTimeout(() => { router.push("/painel"); router.refresh(); }, 1500);
@@ -36,8 +34,10 @@ export default function FormNovaSenha({ nome, email }) {
   return (
     <div style={{ minHeight: "100vh", background: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", padding: 18 }}>
       <div style={{ width: "100%", maxWidth: 400 }}>
-        <div style={{ marginBottom: 26 }}>
-          <h1 style={{ fontSize: 32, color: "#fff", fontWeight: 800 }}>
+        <Marca />
+
+        <div style={{ marginBottom: 22 }}>
+          <h1 style={{ fontSize: 30, color: "#fff", fontWeight: 800 }}>
             {primeiro ? `Olá, ${primeiro}` : "Nova senha"}
           </h1>
           <p className="small" style={{ color: "#8E91A3", marginTop: 8 }}>

@@ -1,10 +1,12 @@
-import { redirect } from "next/navigation";
+import { Suspense } from "react";
+import FormCadastro from "@/components/FormCadastro";
 
-/**
- * "Cadastrar" e "inscrever-se" são a mesma coisa aqui: a conta nasce
- * da inscrição e só ganha acesso ao painel depois da aprovação.
- * Esta rota existe para quem digitar /cadastrar na barra.
- */
+export const dynamic = "force-dynamic";
+
 export default function Cadastrar() {
-  redirect("/inscrever");
+  return (
+    <Suspense fallback={<div className="carregando">Carregando...</div>}>
+      <FormCadastro />
+    </Suspense>
+  );
 }

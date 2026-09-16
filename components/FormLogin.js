@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabaseNavegador } from "@/lib/supabase/cliente";
 import CampoSenha from "./CampoSenha";
+import Marca from "./Marca";
 import Icone from "./Icones";
 
 export default function FormLogin() {
@@ -16,6 +17,23 @@ export default function FormLogin() {
   const [ocupado, setOcupado] = useState(false);
   const [recuperar, setRecuperar] = useState(false);
   const [aviso, setAviso] = useState(null);
+
+  // Erros do Supabase chegam no fragmento (#), que não vai ao servidor
+  useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (!hash) return;
+
+    const p = new URLSearchParams(hash);
+    const codigo = p.get("error_code");
+    if (!codigo) return;
+
+    setErro(
+      codigo === "otp_expired"
+        ? "Esse link já foi usado ou passou de uma hora. Peça um novo abaixo."
+        : p.get("error_description") ?? "Não foi possível validar o link."
+    );
+    history.replaceState(null, "", window.location.pathname);
+  }, []);
 
   async function entrar() {
     setErro(null);
@@ -47,17 +65,19 @@ export default function FormLogin() {
   return (
     <div style={{ minHeight: "100vh", background: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", padding: 18 }}>
       <div style={{ width: "100%", maxWidth: 400 }}>
-        <div style={{ marginBottom: 26 }}>
+        <Marca />
+
+        <div style={{ marginBottom: 22 }}>
           {recuperar && (
             <button
               className="btn-linha"
-              style={{ border: 0, background: "transparent", color: "#8E91A3", padding: 0, marginBottom: 14, fontSize: 13.5, fontWeight: 600 }}
+              style={{ border: 0, background: "transparent", color: "#8E91A3", padding: 0, marginBottom: 12, fontSize: 13.5, fontWeight: 600 }}
               onClick={() => { setRecuperar(false); setErro(null); setAviso(null); }}
             >
               <Icone nome="voltar" size={16} /> Voltar
             </button>
           )}
-          <h1 style={{ fontSize: 32, color: "#fff", fontWeight: 800 }}>
+          <h1 style={{ fontSize: 30, color: "#fff", fontWeight: 800 }}>
             {recuperar ? "Recuperar acesso" : "Entrar"}
           </h1>
           <p className="small" style={{ color: "#8E91A3", marginTop: 8 }}>
@@ -83,12 +103,7 @@ export default function FormLogin() {
           </label>
 
           {!recuperar && (
-            <CampoSenha
-              rotulo="Senha"
-              valor={senha}
-              onChange={setSenha}
-              onEnter={entrar}
-            />
+            <CampoSenha rotulo="Senha" valor={senha} onChange={setSenha} onEnter={entrar} />
           )}
 
           <button
@@ -109,7 +124,9 @@ export default function FormLogin() {
 
         {!recuperar && (
           <div className="rodape-escuro">
-            Ainda não faz parte da equipe? <Link href="/inscrever">Inscreva-se</Link>
+            Ainda não tem conta? <Link href="/cadastrar">Criar conta</Link>
+            <span style={{ margin: "0 8px", opacity: 0.4 }}>·</span>
+            <Link href="/inscrever">Quero servir</Link>
           </div>
         )}
       </div>
