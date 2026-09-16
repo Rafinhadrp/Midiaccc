@@ -15,13 +15,15 @@ export default async function Inscrever() {
 
   const abertas = config?.valor !== false;
 
+  // Com o formulário fechado a logo já aparece no meio do cartão,
+  // então a marca do topo sairia repetida.
   return (
     <div className="pub">
       <div className="pub-inner">
-        <Marca />
-
         {abertas ? (
           <>
+            <Marca />
+
             <div className="live"><span className="dot verde" />Inscrições abertas</div>
             <h1>Sirva na multimídia</h1>
             <p className="lede">

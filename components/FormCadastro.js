@@ -15,7 +15,12 @@ export default function FormCadastro() {
 
   const curta = senha.length > 0 && senha.length < 8;
   const diferentes = confirma.length > 0 && senha !== confirma;
-  const valido = f.nome.trim() && f.email.trim() && senha.length >= 8 && senha === confirma;
+  const digitos = f.telefone.replace(/\D/g, "");
+  const telefoneCurto = f.telefone.length > 0 && digitos.length < 10;
+
+  const valido =
+    f.nome.trim() && f.email.trim() && digitos.length >= 10 &&
+    senha.length >= 8 && senha === confirma;
 
   async function enviar() {
     setErro(null);
@@ -86,13 +91,22 @@ export default function FormCadastro() {
               </label>
 
               <label className="field">
-                <span>WhatsApp <span className="muted" style={{ fontWeight: 400 }}>(opcional)</span></span>
+                <span>WhatsApp</span>
                 <input
                   value={f.telefone}
                   onChange={(e) => setF({ ...f, telefone: e.target.value })}
                   inputMode="tel"
                   placeholder="(11) 99999-0000"
                 />
+                {telefoneCurto ? (
+                  <span className="small" style={{ color: "#B42318", fontWeight: 400, marginTop: 6, display: "block" }}>
+                    Informe o número com DDD.
+                  </span>
+                ) : (
+                  <span className="small muted" style={{ fontWeight: 400, marginTop: 6, display: "block" }}>
+                    É por aqui que a liderança entra em contato.
+                  </span>
+                )}
               </label>
 
               <CampoSenha

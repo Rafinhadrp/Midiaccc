@@ -16,12 +16,27 @@ export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
   const [excluindo, setExcluindo] = useState(null);
   const [erro, setErro] = useState(null);
 
+  // Segue os dados do servidor quando eles mudam
+  const assinatura = JSON.stringify(inscricoes);
+  const [vista, setVista] = useState(assinatura);
+  if (vista !== assinatura) {
+    setVista(assinatura);
+    setLista(inscricoes);
+  }
+
   const acharFuncao = (id) => funcoes.find((f) => f.id === id);
   const nomeFuncao = (id) => acharFuncao(id)?.nome ?? id;
   const visiveis = lista.filter((i) => (filtro === "todas" ? true : i.status === filtro));
 
   const contar = (status) =>
     status === "todas" ? lista.length : lista.filter((i) => i.status === status).length;
+
+  /** Depois de decidir, a linha muda de estado sem recarregar a página. */
+  function aplicarDecisao(id, novoStatus) {
+    setLista((l) => l.map((i) => (i.id === id ? { ...i, status: novoStatus } : i)));
+    setModal(null);
+    router.refresh();
+  }
 
   async function apagar(i) {
     const { error } = await supabaseNavegador().from("inscricoes").delete().eq("id", i.id);
@@ -175,7 +190,7 @@ export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
           {...modal}
           nomeFuncao={nomeFuncao}
           onFechar={() => setModal(null)}
-          onPronto={() => { setModal(null); router.refresh(); }}
+          onPronto={(tipo) => aplicarDecisao(modal.inscricao.id, tipo)}
         />
       )}
 
@@ -214,12 +229,16 @@ function ModalDecisao({ inscricao, tipo, nomeFuncao, onFechar, onPronto }) {
       const dados = await r.json();
 
       if (!r.ok) { setErro(dados.erro || "Não deu certo."); setOcupado(false); return; }
+
       if (!dados.enviado) {
+        // A decisão foi gravada: a lista precisa refletir isso mesmo
+        // com a mensagem falhando, senão parece que nada aconteceu.
         setErro(`Decisão salva, mas a mensagem não saiu: ${dados.erroEnvio}`);
         setOcupado(false);
         return;
       }
-      onPronto();
+
+      onPronto(tipo);
     } catch {
       setErro("Sem conexão com o servidor.");
       setOcupado(false);
@@ -240,7 +259,18 @@ function ModalDecisao({ inscricao, tipo, nomeFuncao, onFechar, onPronto }) {
         </div>
 
         <div className="modal-body">
-          {erro && <div className="aviso aviso-erro">{erro}</div>}
+          {erro && (
+            <>
+              <div className="aviso aviso-erro">{erro}</div>
+              <button
+                className="btn btn-bloco"
+                style={{ marginBottom: 14 }}
+                onClick={() => onPronto(tipo)}
+              >
+                Fechar e atualizar a lista
+              </button>
+            </>
+          )}
 
           <div style={{ display: "flex", gap: 8, marginBottom: 12, alignItems: "center", flexWrap: "wrap" }}>
             {[["email", "E-mail"], ["whatsapp", "WhatsApp"]].map(([id, nome]) => (

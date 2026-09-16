@@ -22,6 +22,16 @@ export async function POST(req) {
   if (!nome?.trim() || !email?.trim() || !senha) {
     return NextResponse.json({ erro: "Preencha nome, e-mail e senha." }, { status: 400 });
   }
+
+  // O WhatsApp é o canal principal de contato da liderança
+  const digitos = String(telefone ?? "").replace(/\D/g, "");
+  if (digitos.length < 10) {
+    return NextResponse.json(
+      { erro: "Informe um WhatsApp válido com DDD." },
+      { status: 400 }
+    );
+  }
+
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim())) {
     return NextResponse.json({ erro: "E-mail inválido." }, { status: 400 });
   }
@@ -72,7 +82,7 @@ export async function POST(req) {
 
   const { error } = await supabase.from("inscricoes").insert({
     nome: nome.trim(),
-    telefone: telefone?.trim() || "não informado",
+    telefone: telefone.trim(),
     email: emailLimpo,
     funcoes: [],
     origem: "cadastro",

@@ -671,3 +671,33 @@ html, body { margin: 0; padding: 0; }
   .mm .chave-linha { width: 100%; }
   .mm .chave-sub { max-width: none; }
 }
+
+/* ============================================================
+   v6 — cole no FINAL de app/globals.css
+   Conserta o menu de três pontos sendo cortado pela borda do
+   cartão e dá espaço para o conteúdo que abre no último item.
+   ============================================================ */
+
+/* O cartão cortava tudo que passasse da borda, inclusive o menu.
+   Como os itens já têm borda reta no topo, dá para liberar o
+   transbordo sem estragar os cantos arredondados. */
+.mm .block { overflow: visible; }
+.mm .block > .item:last-child {
+  border-bottom-left-radius: var(--r-lg);
+  border-bottom-right-radius: var(--r-lg);
+}
+.mm .matrix-wrap { border-radius: 0 0 var(--r-lg) var(--r-lg); }
+
+/* O menu passa por cima de qualquer cartão vizinho */
+.mm .menu-wrap { z-index: 1; }
+.mm .menu-wrap:has(.menu) { z-index: 45; }
+.mm .menu { z-index: 45; }
+
+/* Espaço no fim da página para o menu do último item caber */
+.mm .content { padding-bottom: 120px; }
+
+@media (max-width: 880px) {
+  .mm .content { padding-bottom: 130px; }
+  /* no celular o menu vira folha de baixo, então não precisa de folga extra */
+  .mm .folha-fundo { z-index: 70; }
+}
