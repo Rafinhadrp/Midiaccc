@@ -26,7 +26,7 @@ export default function EditorEscalas({ eventosIniciais, funcoes, membros, podeE
       titulo: "Culto de celebração",
       dia: "",
       mes: "",
-      hora: "18:30",
+      hora: "19:00",
       observacao: "",
       escala: {},
       editando: true,
