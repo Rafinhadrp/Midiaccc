@@ -2,26 +2,26 @@ import { NextResponse } from "next/server";
 import { supabaseServidor } from "@/lib/supabase/server";
 
 /**
- * Ponto de chegada dos links enviados por e-mail (recuperação de senha,
- * convite de acesso). O link traz um código de uso único; aqui ele é
- * trocado por uma sessão de verdade, e só então a pessoa segue adiante.
+ * Volta do Google (e de qualquer link com código).
+ *
+ * Depois de criar a sessão, decide para onde mandar a pessoa:
+ *  - já tem perfil        -> painel
+ *  - já tem inscrição     -> tela de espera
+ *  - acabou de chegar     -> completar cadastro
  */
 export async function GET(req) {
   const url = new URL(req.url);
   const code = url.searchParams.get("code");
-  const proximo = url.searchParams.get("next") || "/painel";
-
-  // O Supabase devolve o erro na própria URL quando o link expirou
   const erroUrl = url.searchParams.get("error_description") || url.searchParams.get("error");
+
   if (erroUrl) {
     return NextResponse.redirect(
       new URL(`/login?erro=${encodeURIComponent(erroUrl)}`, url.origin)
     );
   }
-
   if (!code) {
     return NextResponse.redirect(
-      new URL("/login?erro=Link%20inv%C3%A1lido%20ou%20incompleto", url.origin)
+      new URL(`/login?erro=${encodeURIComponent("Link inválido ou incompleto.")}`, url.origin)
     );
   }
 
@@ -31,11 +31,24 @@ export async function GET(req) {
   if (error) {
     return NextResponse.redirect(
       new URL(
-        `/login?erro=${encodeURIComponent("O link expirou ou já foi usado. Peça um novo.")}`,
+        `/login?erro=${encodeURIComponent("Não foi possível concluir a entrada. Tente de novo.")}`,
         url.origin
       )
     );
   }
 
-  return NextResponse.redirect(new URL(proximo, url.origin));
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return NextResponse.redirect(new URL("/login", url.origin));
+
+  const { data: perfil } = await supabase
+    .from("perfis").select("id").eq("id", user.id).maybeSingle();
+
+  if (perfil) return NextResponse.redirect(new URL("/painel", url.origin));
+
+  const { data: insc } = await supabase
+    .from("inscricoes").select("id").eq("email", user.email).maybeSingle();
+
+  return NextResponse.redirect(
+    new URL(insc ? "/aguardando" : "/completar-cadastro", url.origin)
+  );
 }

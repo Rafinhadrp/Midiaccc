@@ -701,3 +701,32 @@ html, body { margin: 0; padding: 0; }
   /* no celular o menu vira folha de baixo, então não precisa de folga extra */
   .mm .folha-fundo { z-index: 70; }
 }
+
+/* ============================================================
+   v7 — cole no FINAL de app/globals.css
+   Botão do Google e cartão da conta conectada.
+   ============================================================ */
+
+.mm .btn-google {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 12px 16px; font-weight: 600;
+  border: 1px solid var(--line); background: #fff; color: var(--text);
+}
+.mm .btn-google:hover { background: #FAFAFB; border-color: #CFCFDA; }
+.mm .btn-google svg { flex-shrink: 0; }
+
+/* separador "ou" entre Google e e-mail */
+.mm .ou {
+  display: flex; align-items: center; gap: 12px;
+  margin: 18px 0; color: var(--muted); font-size: 12.5px; font-weight: 600;
+}
+.mm .ou::before, .mm .ou::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+
+/* conta do Google já conectada, na tela de completar cadastro */
+.mm .conta-google {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; margin-bottom: 20px;
+  background: var(--off-bg); border-radius: var(--r-md);
+}

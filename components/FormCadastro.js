@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Marca from "./Marca";
 import CampoSenha from "./CampoSenha";
+import BotaoGoogle from "./BotaoGoogle";
 import Icone from "./Icones";
 
 export default function FormCadastro() {
@@ -66,8 +67,12 @@ export default function FormCadastro() {
               </p>
             </div>
 
+            {/* ---- cartão branco ---- */}
             <div style={{ background: "#fff", borderRadius: 18, padding: 24 }}>
               {erro && <div className="aviso aviso-erro">{erro}</div>}
+
+              <BotaoGoogle rotulo="Cadastrar com o Google" />
+              <div className="ou">ou preencha abaixo</div>
 
               <label className="field">
                 <span>Nome completo</span>
@@ -75,7 +80,6 @@ export default function FormCadastro() {
                   value={f.nome}
                   onChange={(e) => setF({ ...f, nome: e.target.value })}
                   placeholder="Como está no seu documento"
-                  autoFocus
                 />
               </label>
 

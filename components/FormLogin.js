@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabaseNavegador } from "@/lib/supabase/cliente";
 import CampoSenha from "./CampoSenha";
+import BotaoGoogle from "./BotaoGoogle";
 import Marca from "./Marca";
 import Icone from "./Icones";
 
@@ -87,9 +88,17 @@ export default function FormLogin() {
           </p>
         </div>
 
+        {/* ---- cartão branco ---- */}
         <div style={{ background: "#fff", borderRadius: 18, padding: 24 }}>
           {erro && <div className="aviso aviso-erro">{erro}</div>}
           {aviso && <div className="aviso aviso-ok">{aviso}</div>}
+
+          {!recuperar && (
+            <>
+              <BotaoGoogle rotulo="Entrar com o Google" />
+              <div className="ou">ou</div>
+            </>
+          )}
 
           <label className="field">
             <span>E-mail</span>

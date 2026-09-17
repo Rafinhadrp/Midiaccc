@@ -7,10 +7,16 @@ export default async function PainelLayout({ children }) {
   const perfil = await perfilAtual();
 
   if (!perfil) {
-    // Tem conta mas ainda não tem perfil: inscrição não aprovada
     const supabase = await supabaseServidor();
     const { data: { user } } = await supabase.auth.getUser();
-    redirect(user ? "/aguardando" : "/login");
+
+    if (!user) redirect("/login");
+
+    // Entrou pelo Google e ainda não completou o cadastro
+    const { data: insc } = await supabase
+      .from("inscricoes").select("id").eq("email", user.email).maybeSingle();
+
+    redirect(insc ? "/aguardando" : "/completar-cadastro");
   }
 
   return (
