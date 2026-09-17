@@ -2,6 +2,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Marca from "./Marca";
+import Rodape from "./Rodape";
 import CampoSenha from "./CampoSenha";
 import BotaoGoogle from "./BotaoGoogle";
 import Icone from "./Icones";
@@ -67,7 +68,6 @@ export default function FormCadastro() {
               </p>
             </div>
 
-            {/* ---- cartão branco ---- */}
             <div style={{ background: "#fff", borderRadius: 18, padding: 24 }}>
               {erro && <div className="aviso aviso-erro">{erro}</div>}
 
@@ -147,6 +147,8 @@ export default function FormCadastro() {
             </div>
           </>
         )}
+
+        <Rodape />
       </div>
     </div>
   );

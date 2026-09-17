@@ -6,6 +6,7 @@ import { supabaseNavegador } from "@/lib/supabase/cliente";
 import CampoSenha from "./CampoSenha";
 import BotaoGoogle from "./BotaoGoogle";
 import Marca from "./Marca";
+import Rodape from "./Rodape";
 import Icone from "./Icones";
 
 export default function FormLogin() {
@@ -88,7 +89,6 @@ export default function FormLogin() {
           </p>
         </div>
 
-        {/* ---- cartão branco ---- */}
         <div style={{ background: "#fff", borderRadius: 18, padding: 24 }}>
           {erro && <div className="aviso aviso-erro">{erro}</div>}
           {aviso && <div className="aviso aviso-ok">{aviso}</div>}
@@ -138,6 +138,8 @@ export default function FormLogin() {
             <Link href="/inscrever">Quero servir</Link>
           </div>
         )}
+
+        <Rodape />
       </div>
     </div>
   );

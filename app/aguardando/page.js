@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { supabaseServidor } from "@/lib/supabase/server";
 import Marca from "@/components/Marca";
+import Rodape from "@/components/Rodape";
 import SairSimples from "@/components/SairSimples";
 
 export const dynamic = "force-dynamic";
@@ -60,6 +61,8 @@ export default async function Aguardando() {
             <SairSimples />
           </div>
         </div>
+
+        <Rodape />
       </div>
     </div>
   );
