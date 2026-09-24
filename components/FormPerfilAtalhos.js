@@ -3,11 +3,12 @@ import Link from "next/link";
 import Icone from "./Icones";
 
 /**
- * No celular a barra de baixo só comporta cinco abas, então
- * Registro e Acessos ficam acessíveis aqui, dentro do Perfil.
+ * No celular a barra de baixo só comporta cinco abas, então as
+ * áreas de administração ficam acessíveis aqui, dentro do Perfil.
  */
 export default function FormPerfilAtalhos({ permissoes }) {
   const itens = [
+    { href: "/painel/eventos", nome: "Eventos", sub: "Ingressos, pedidos e caixa", ico: "ingresso", perm: "eventos:gerenciar" },
     { href: "/painel/registro", nome: "Registro de mensagens", sub: "O que o sistema enviou", ico: "email", perm: "inscricoes:ver" },
     { href: "/painel/acessos", nome: "Acessos", sub: "Papéis, permissões e funções", ico: "acessos", perm: "acessos:gerenciar" },
   ].filter((i) => permissoes.includes(i.perm));

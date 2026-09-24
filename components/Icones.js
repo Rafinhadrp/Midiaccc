@@ -113,6 +113,12 @@ const TRACOS = {
       <circle cx="18" cy="16" r="3" />
     </>
   ),
+  ingresso: (
+    <>
+      <path d="M3 9.5V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2.5a2.5 2.5 0 0 0 0 5V17a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-2.5a2.5 2.5 0 0 0 0-5z" />
+      <path d="M14 5v2M14 11v2M14 17v2" />
+    </>
+  ),
   ponto: <circle cx="12" cy="12" r="5" />,
 
   // --- interface ---

@@ -11,6 +11,7 @@ const ABAS = [
   { href: "/painel/inscricoes", nome: "Inscrições", ico: "inscricoes", perm: "inscricoes:ver" },
   { href: "/painel/escalas",    nome: "Escalas",    ico: "escalas",    perm: "escalas:ver" },
   { href: "/painel/membros",    nome: "Membros",    ico: "membros",    perm: "membros:ver" },
+  { href: "/painel/eventos",    nome: "Eventos",    ico: "ingresso",   perm: "eventos:gerenciar", soDesktop: true },
   { href: "/painel/registro",   nome: "Registro",   ico: "email",      perm: "inscricoes:ver", soDesktop: true },
   { href: "/painel/acessos",    nome: "Acessos",    ico: "acessos",    perm: "acessos:gerenciar", soDesktop: true },
   { href: "/painel/perfil",     nome: "Perfil",     ico: "perfil",     perm: null, soMobile: true },
@@ -26,6 +27,8 @@ export default function Shell({ perfil, children }) {
     router.push("/login");
     router.refresh();
   }
+
+  const ativo = (href) => caminho === href || caminho.startsWith(href + "/");
 
   return (
     <>
@@ -46,7 +49,7 @@ export default function Shell({ perfil, children }) {
               <Link
                 key={a.href}
                 href={a.href}
-                className={"navitem" + (caminho === a.href ? " on" : "")}
+                className={"navitem" + (ativo(a.href) ? " on" : "")}
               >
                 <span className="ico"><Icone nome={a.ico} size={18} /></span>
                 {a.nome}
@@ -77,10 +80,9 @@ export default function Shell({ perfil, children }) {
         <div className="main">{children}</div>
       </div>
 
-      {/* No celular a barra fica com 5 itens; Registro e Acessos entram no Perfil */}
       <nav className="tabbar">
         {abas.filter((a) => !a.soDesktop).map((a) => (
-          <Link key={a.href} href={a.href} className={"tab" + (caminho === a.href ? " on" : "")}>
+          <Link key={a.href} href={a.href} className={"tab" + (ativo(a.href) ? " on" : "")}>
             <span className="ico">
               {a.href === "/painel/perfil" ? (
                 <Avatar nome={perfil.nome} foto={perfil.foto_url} size={20} />

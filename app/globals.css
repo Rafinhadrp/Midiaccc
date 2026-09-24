@@ -783,3 +783,135 @@ html, body { margin: 0; padding: 0; }
   .mm .politica h1 { font-size: 27px; }
   .mm .politica h2 { font-size: 17.5px; }
 }
+
+/* ============================================================
+   v8 — cole no FINAL de app/globals.css
+   Eventos, compra, Pix, ingresso e conferência na entrada.
+   ============================================================ */
+
+/* ---- lista pública de eventos ---- */
+.mm .eventos-lista { display: flex; flex-direction: column; gap: 14px; margin-top: 28px; }
+
+.mm .evento-card {
+  background: #fff; border-radius: 18px; padding: 22px;
+}
+.mm .evento-topo { display: flex; gap: 16px; align-items: flex-start; }
+.mm .evento-topo h3 { font-size: 19px; }
+.mm .evento-quando { font-size: 13.5px; color: var(--muted); margin-top: 5px; }
+.mm .evento-local { font-size: 13.5px; color: var(--muted); margin-top: 2px; }
+.mm .evento-preco {
+  margin-left: auto; flex-shrink: 0; text-align: right;
+  font-family: 'Bricolage Grotesque', sans-serif; font-size: 21px; font-weight: 700;
+}
+.mm .evento-desc {
+  font-size: 14px; line-height: 1.55; color: var(--text);
+  margin: 14px 0 0; white-space: pre-wrap;
+}
+.mm .evento-rodape {
+  display: flex; align-items: center; gap: 12px;
+  margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line-2);
+  flex-wrap: wrap;
+}
+
+.mm .total-linha {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 16px; background: var(--off-bg); border-radius: var(--r-md);
+  font-size: 15px; margin-top: 4px;
+}
+.mm .total-linha strong { font-size: 19px; font-family: 'Bricolage Grotesque', sans-serif; }
+
+/* ---- tela do Pix ---- */
+.mm .pix-painel { text-align: center; }
+.mm .pix-valor {
+  font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700;
+  margin-bottom: 16px;
+}
+.mm .pix-qr {
+  width: 210px; height: 210px; display: block; margin: 0 auto 16px;
+  border: 1px solid var(--line); border-radius: 14px; background: #fff; padding: 8px;
+}
+.mm .pix-codigo {
+  margin-top: 12px; padding: 12px; background: var(--off-bg); border-radius: 10px;
+  font-size: 11px; font-family: ui-monospace, monospace; color: var(--muted);
+  word-break: break-all; line-height: 1.5; max-height: 76px; overflow: auto;
+  text-align: left;
+}
+.mm .pix-espera {
+  display: flex; align-items: center; justify-content: center; gap: 9px;
+  margin-top: 18px; font-size: 13.5px; font-weight: 600;
+}
+.mm .girando {
+  width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid var(--line); border-top-color: var(--ink);
+  animation: mm-gira .8s linear infinite;
+}
+@keyframes mm-gira { to { transform: rotate(360deg) } }
+@media (prefers-reduced-motion: reduce) { .mm .girando { animation-duration: 3s } }
+
+/* ---- código do ingresso ---- */
+.mm .codigo-grande {
+  font-family: 'Bricolage Grotesque', sans-serif; font-size: 31px; font-weight: 800;
+  letter-spacing: 0.06em; margin: 14px 0 18px;
+}
+
+/* ---- ingresso ---- */
+.mm .ingresso {
+  background: #fff; border-radius: 20px; overflow: hidden; margin-top: 28px;
+}
+.mm .ingresso-topo { padding: 24px 24px 20px; background: var(--ink); color: #fff; }
+.mm .ingresso-evento {
+  font-family: 'Bricolage Grotesque', sans-serif; font-size: 21px; font-weight: 700;
+}
+.mm .ingresso-quando { font-size: 13.5px; color: #A7AAB8; margin-top: 6px; }
+.mm .ingresso-local { font-size: 13.5px; color: #A7AAB8; margin-top: 2px; }
+.mm .ingresso-picote {
+  height: 18px; background: var(--ink);
+  -webkit-mask-image: radial-gradient(circle 9px at 0 50%, transparent 99%, #000 100%),
+                      radial-gradient(circle 9px at 100% 50%, transparent 99%, #000 100%);
+  mask-image: radial-gradient(circle 9px at 0 50%, transparent 99%, #000 100%),
+              radial-gradient(circle 9px at 100% 50%, transparent 99%, #000 100%);
+  -webkit-mask-composite: source-in; mask-composite: intersect;
+}
+.mm .ingresso-corpo { padding: 22px 24px 26px; text-align: center; }
+.mm .ingresso-rotulo {
+  font-size: 11.5px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: .04em; margin-bottom: 3px;
+}
+.mm .ingresso-dados {
+  display: flex; justify-content: space-around; gap: 12px;
+  padding: 16px 0; border-top: 1px solid var(--line-2); font-size: 14px;
+}
+.mm .ingresso-selo {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px; border-radius: 999px; font-size: 13.5px; font-weight: 600;
+  margin-top: 14px;
+}
+.mm .selo-pago { background: var(--go-bg); color: var(--go); }
+.mm .selo-pendente { background: var(--wait-bg); color: var(--wait); }
+.mm .selo-expirado, .mm .selo-cancelado { background: #FDECEA; color: #B42318; }
+
+/* ---- conferência na entrada ---- */
+.mm .checkin-ico {
+  width: 60px; height: 60px; border-radius: 18px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+}
+.mm .checkin-ico.ok { background: var(--go-bg); color: var(--go); }
+.mm .checkin-ico.aviso { background: var(--wait-bg); color: var(--wait); }
+.mm .checkin-ico.erro { background: #FDECEA; color: #B42318; }
+.mm .checkin-dados {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 16px; background: var(--off-bg); border-radius: var(--r-md);
+  font-size: 14px; text-align: left;
+}
+.mm .checkin-dados > div { display: flex; justify-content: space-between; gap: 12px; }
+
+@media (max-width: 880px) {
+  .mm .evento-card { padding: 18px; }
+  .mm .evento-topo { flex-direction: column; gap: 10px; }
+  .mm .evento-preco { margin-left: 0; text-align: left; }
+  .mm .evento-rodape .btn { width: 100%; margin-left: 0 !important; }
+  .mm .pix-qr { width: 180px; height: 180px; }
+  .mm .codigo-grande { font-size: 26px; }
+  .mm .ingresso-dados { flex-direction: column; text-align: left; gap: 12px; }
+  .mm .ingresso-dados > div { display: flex; justify-content: space-between; }
+}
