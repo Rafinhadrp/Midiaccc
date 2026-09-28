@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { gerarQr } from "@/lib/qr";
 import Marca from "@/components/Marca";
 import Rodape from "@/components/Rodape";
 import Icone from "@/components/Icones";
@@ -13,13 +14,22 @@ export default async function Ingresso({ params }) {
   const { codigo } = await params;
   const admin = supabaseAdmin();
 
+  const codigoLimpo = decodeURIComponent(codigo).toUpperCase();
+
   const { data: pedido } = await admin
     .from("pedidos")
     .select("*, eventos_pagos(nome, data_evento, hora, local)")
-    .eq("codigo", decodeURIComponent(codigo).toUpperCase())
+    .eq("codigo", codigoLimpo)
     .maybeSingle();
 
   const evento = pedido?.eventos_pagos;
+
+  // O QR leva para a tela de conferência. Quem não for administrador
+  // cai no login e não consegue liberar entrada nenhuma.
+  const qr =
+    pedido?.status === "pago"
+      ? await gerarQr(`${process.env.NEXT_PUBLIC_SITE_URL}/painel/checkin/${pedido.codigo}`)
+      : null;
 
   return (
     <div className="pub">
@@ -55,7 +65,16 @@ export default async function Ingresso({ params }) {
             <div className="ingresso-picote" aria-hidden="true" />
 
             <div className="ingresso-corpo">
-              <div className="ingresso-rotulo">Código</div>
+              {qr && (
+                <div className="ingresso-qr">
+                  <img src={qr} alt={`QR code do ingresso ${pedido.codigo}`} />
+                  <div className="small muted" style={{ marginTop: 10 }}>
+                    Mostre este código na entrada
+                  </div>
+                </div>
+              )}
+
+              <div className="ingresso-rotulo" style={{ marginTop: qr ? 20 : 0 }}>Código</div>
               <div className="codigo-grande">{pedido.codigo}</div>
 
               <div className="ingresso-dados">
@@ -85,9 +104,10 @@ export default async function Ingresso({ params }) {
               </div>
 
               {pedido.status === "pago" && (
-                <p className="small muted" style={{ marginTop: 14, textAlign: "center" }}>
-                  Mostre este código na entrada. Vale para {pedido.quantidade}{" "}
-                  {pedido.quantidade === 1 ? "pessoa" : "pessoas"}.
+                <p className="small muted" style={{ marginTop: 14 }}>
+                  Vale para {pedido.quantidade}{" "}
+                  {pedido.quantidade === 1 ? "pessoa" : "pessoas"}. Se a tela estiver
+                  escura, aumente o brilho para a câmera conseguir ler.
                 </p>
               )}
             </div>

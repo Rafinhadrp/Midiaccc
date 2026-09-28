@@ -915,3 +915,59 @@ html, body { margin: 0; padding: 0; }
   .mm .ingresso-dados { flex-direction: column; text-align: left; gap: 12px; }
   .mm .ingresso-dados > div { display: flex; justify-content: space-between; }
 }
+
+/* ============================================================
+   v9 — cole no FINAL de app/globals.css
+   QR no ingresso e leitor de câmera na conferência.
+   ============================================================ */
+
+/* ---- QR dentro do ingresso ---- */
+.mm .ingresso-qr {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 18px 0 4px;
+}
+.mm .ingresso-qr img {
+  width: 208px; height: 208px; display: block;
+  border: 1px solid var(--line); border-radius: 14px;
+  background: #fff; padding: 8px;
+}
+
+/* ---- leitor de câmera ---- */
+.mm .leitor-palco {
+  position: relative; width: 100%; aspect-ratio: 1 / 1;
+  background: var(--off-bg); border-radius: var(--r-md);
+  overflow: hidden; display: flex; align-items: center; justify-content: center;
+}
+.mm .leitor-palco video {
+  width: 100%; height: 100%; object-fit: cover; display: none;
+}
+.mm .leitor-palco.ativo video { display: block; }
+.mm .leitor-palco.ativo { background: var(--ink); }
+
+.mm .leitor-vazio {
+  display: flex; flex-direction: column; align-items: center;
+  color: var(--muted); text-align: center; padding: 20px;
+}
+
+/* moldura que mostra onde apontar */
+.mm .leitor-mira {
+  position: absolute; inset: 16%;
+  border: 2px solid rgba(255,255,255,.9); border-radius: 18px;
+  box-shadow: 0 0 0 2000px rgba(15,16,21,.35);
+}
+.mm .leitor-mira::before,
+.mm .leitor-mira::after {
+  content: ''; position: absolute; left: -2px; right: -2px; height: 2px;
+  background: var(--tally); box-shadow: 0 0 12px var(--tally);
+}
+.mm .leitor-mira::before { top: -2px; }
+.mm .leitor-mira::after { bottom: -2px; }
+
+@media (max-width: 880px) {
+  .mm .ingresso-qr img { width: 180px; height: 180px; }
+  .mm .leitor-palco { aspect-ratio: 3 / 4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mm .leitor-mira::before, .mm .leitor-mira::after { box-shadow: none; }
+}

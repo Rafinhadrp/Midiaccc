@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { supabaseServidor } from "@/lib/supabase/server";
 import { perfilAtual, pode } from "@/lib/permissoes";
 import Topo from "@/components/Topo";
+import Icone from "@/components/Icones";
 import GerenciarEventos from "@/components/GerenciarEventos";
 
 export const dynamic = "force-dynamic";
@@ -34,7 +36,15 @@ export default async function PaginaEventos() {
 
   return (
     <>
-      <Topo titulo="Eventos" sub="Ingressos, pedidos e caixa" />
+      <Topo
+        titulo="Eventos"
+        sub="Ingressos, pedidos e caixa"
+        acao={
+          <Link className="btn btn-primary btn-linha" href="/painel/checkin">
+            <Icone nome="camera" size={16} /> Ler ingressos
+          </Link>
+        }
+      />
       <div className="content">
         <GerenciarEventos
           eventos={eventos ?? []}
