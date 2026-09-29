@@ -971,3 +971,62 @@ html, body { margin: 0; padding: 0; }
 @media (prefers-reduced-motion: reduce) {
   .mm .leitor-mira::before, .mm .leitor-mira::after { box-shadow: none; }
 }
+
+/* ============================================================
+   v10 — cole no FINAL de app/globals.css
+   Veredito na câmera, histórico e cartão de conferência.
+   Substitui o bloco do leitor que veio na v9.
+   ============================================================ */
+
+/* ---- veredito por cima da câmera ---- */
+.mm .veredito {
+  position: absolute; inset: 0; z-index: 3;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 22px; color: #fff;
+  animation: mm-veredito .18s ease-out;
+}
+.mm .veredito.ok { background: rgba(18, 140, 90, .96); }
+.mm .veredito.aviso { background: rgba(176, 118, 8, .96); }
+.mm .veredito.ruim { background: rgba(170, 33, 22, .96); }
+
+.mm .veredito-titulo {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 27px; font-weight: 800; margin-top: 12px; line-height: 1.1;
+}
+.mm .veredito-nome { font-size: 16px; font-weight: 600; margin-top: 8px; opacity: .95; }
+.mm .veredito-detalhe { font-size: 13.5px; margin-top: 6px; opacity: .85; }
+
+@keyframes mm-veredito {
+  from { opacity: 0; transform: scale(.97) }
+  to { opacity: 1; transform: scale(1) }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mm .veredito { animation: none }
+}
+
+/* ---- histórico da sessão ---- */
+.mm .hist-ponto {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+}
+.mm .hist-ponto.ok { background: var(--go); }
+.mm .hist-ponto.aviso { background: var(--wait); }
+.mm .hist-ponto.ruim { background: #B42318; }
+
+/* ---- cartão de conferência (câmera nativa do celular) ---- */
+.mm .checkin-cartao {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--r-lg);
+  padding: 28px 22px; text-align: center;
+}
+.mm .checkin-cartao.ok { border-color: #A7E0C4; background: #F4FCF8; }
+.mm .checkin-cartao.aviso { border-color: #EFD9A0; background: #FEFAF1; }
+.mm .checkin-cartao.ruim { border-color: #F3C9C4; background: #FEF7F6; }
+
+.mm .checkin-ico-grande {
+  width: 76px; height: 76px; border-radius: 24px; margin: 0 auto;
+  display: flex; align-items: center; justify-content: center;
+}
+.mm .checkin-cartao.ok .checkin-ico-grande { background: var(--go); color: #fff; }
+.mm .checkin-cartao.aviso .checkin-ico-grande { background: var(--wait); color: #fff; }
+.mm .checkin-cartao.ruim .checkin-ico-grande { background: #B42318; color: #fff; }
+
+.mm .checkin-cartao .checkin-dados { background: rgba(255,255,255,.7); }
