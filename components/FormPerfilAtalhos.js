@@ -9,6 +9,7 @@ import Icone from "./Icones";
 export default function FormPerfilAtalhos({ permissoes }) {
   const itens = [
     { href: "/painel/eventos", nome: "Eventos", sub: "Ingressos, pedidos e caixa", ico: "ingresso", perm: "eventos:gerenciar" },
+    { href: "/painel/qrcode", nome: "QR code", sub: "Gerar código para artes e vídeos", ico: "qrcode", perm: "qrcode:usar" },
     { href: "/painel/registro", nome: "Registro de mensagens", sub: "O que o sistema enviou", ico: "email", perm: "inscricoes:ver" },
     { href: "/painel/acessos", nome: "Acessos", sub: "Papéis, permissões e funções", ico: "acessos", perm: "acessos:gerenciar" },
   ].filter((i) => permissoes.includes(i.perm));

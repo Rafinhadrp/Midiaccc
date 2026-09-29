@@ -119,6 +119,14 @@ const TRACOS = {
       <path d="M14 5v2M14 11v2M14 17v2" />
     </>
   ),
+  qrcode: (
+    <>
+      <rect x="3" y="3" width="7" height="7" rx="1" />
+      <rect x="14" y="3" width="7" height="7" rx="1" />
+      <rect x="3" y="14" width="7" height="7" rx="1" />
+      <path d="M14 14h3v3h-3zM18 18h3v3h-3zM14 21h3M21 14v3" />
+    </>
+  ),
   ponto: <circle cx="12" cy="12" r="5" />,
 
   // --- interface ---

@@ -12,6 +12,7 @@ const ABAS = [
   { href: "/painel/escalas",    nome: "Escalas",    ico: "escalas",    perm: "escalas:ver" },
   { href: "/painel/membros",    nome: "Membros",    ico: "membros",    perm: "membros:ver" },
   { href: "/painel/eventos",    nome: "Eventos",    ico: "ingresso",   perm: "eventos:gerenciar", soDesktop: true },
+  { href: "/painel/qrcode",     nome: "QR code",    ico: "qrcode",     perm: "qrcode:usar", soDesktop: true },
   { href: "/painel/registro",   nome: "Registro",   ico: "email",      perm: "inscricoes:ver", soDesktop: true },
   { href: "/painel/acessos",    nome: "Acessos",    ico: "acessos",    perm: "acessos:gerenciar", soDesktop: true },
   { href: "/painel/perfil",     nome: "Perfil",     ico: "perfil",     perm: null, soMobile: true },

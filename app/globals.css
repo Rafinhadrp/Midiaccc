@@ -1030,3 +1030,119 @@ html, body { margin: 0; padding: 0; }
 .mm .checkin-cartao.ruim .checkin-ico-grande { background: #B42318; color: #fff; }
 
 .mm .checkin-cartao .checkin-dados { background: rgba(255,255,255,.7); }
+
+/* ============================================================
+   v11 — cole no FINAL de app/globals.css
+   Ingresso sem picote e gerador de QR code.
+   ============================================================ */
+
+/* ---- o picote saiu: o corte entre o topo escuro e o corpo
+   branco agora é reto ---- */
+.mm .ingresso-picote { display: none; }
+.mm .ingresso-topo { padding-bottom: 24px; }
+
+/* ============================================================
+   Gerador de QR
+   ============================================================ */
+
+.mm .qr-layout {
+  display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 18px;
+  align-items: start;
+}
+.mm .qr-previa { position: sticky; top: 20px; }
+
+.mm .qr-secao {
+  font-size: 13px; font-weight: 700; color: var(--muted);
+  letter-spacing: .01em;
+}
+
+.mm .qr-tipos { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+.mm .qr-opcoes { display: flex; flex-wrap: wrap; gap: 7px; }
+
+/* ---- paleta ---- */
+.mm .qr-cores { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.mm .qr-cor {
+  width: 30px; height: 30px; border-radius: 8px; padding: 0;
+  border: 1px solid rgba(15,16,21,.12); cursor: pointer;
+}
+.mm .qr-cor.on {
+  border: 2px solid var(--ink);
+  box-shadow: inset 0 0 0 2px #fff;
+}
+.mm .qr-cor-livre {
+  width: 30px; height: 30px; border-radius: 8px; overflow: hidden;
+  border: 1px dashed var(--line); cursor: pointer; position: relative;
+  background:
+    conic-gradient(from 0deg, #FF3B2F, #F79009, #16A46B, #2E6BFF, #8B5CF6, #FF3B2F);
+}
+.mm .qr-cor-livre input {
+  position: absolute; inset: -6px; opacity: 0; cursor: pointer; width: 150%; height: 150%;
+}
+
+/* ---- upload ---- */
+.mm .qr-upload {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 26px 18px; border: 1.5px dashed var(--line); border-radius: var(--r-md);
+  background: #FBFBFC; color: var(--muted); cursor: pointer; text-align: center;
+  transition: border-color .14s, background .14s;
+}
+.mm .qr-upload:hover { border-color: #C6C7D2; background: var(--off-bg); }
+
+.mm .qr-logo-atual {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; background: var(--off-bg); border-radius: var(--r-md);
+}
+.mm .qr-logo-atual > img {
+  width: 40px; height: 40px; object-fit: contain; border-radius: 8px;
+  background: #fff; padding: 4px; flex-shrink: 0;
+}
+
+/* ---- nível ---- */
+.mm .qr-nivel {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; text-align: left; margin-bottom: 8px;
+  padding: 12px 14px; border-radius: var(--r-md);
+  border: 1px solid var(--line); background: #fff; color: var(--text);
+}
+.mm .qr-nivel:hover { border-color: #C6C7D2; }
+.mm .qr-nivel.on { border-color: var(--ink); background: var(--off-bg); }
+
+/* ---- palco da prévia ---- */
+.mm .qr-palco {
+  display: flex; align-items: center; justify-content: center;
+  aspect-ratio: 1 / 1; border-radius: var(--r-md); overflow: hidden;
+  background: #fff; border: 1px solid var(--line); padding: 16px;
+  position: relative;
+}
+/* xadrez indica transparência, como em editor de imagem */
+.mm .qr-palco.xadrez {
+  background-color: #fff;
+  background-image:
+    linear-gradient(45deg, #EDEEF2 25%, transparent 25%),
+    linear-gradient(-45deg, #EDEEF2 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #EDEEF2 75%),
+    linear-gradient(-45deg, transparent 75%, #EDEEF2 75%);
+  background-size: 16px 16px;
+  background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+}
+.mm .qr-palco > div { max-width: 100%; line-height: 0; }
+.mm .qr-palco svg, .mm .qr-palco canvas { max-width: 100%; height: auto; }
+.mm .qr-palco .apagado { opacity: 0; position: absolute; pointer-events: none; }
+
+.mm .qr-palco-vazio {
+  display: flex; flex-direction: column; align-items: center;
+  color: var(--muted); text-align: center;
+}
+
+.mm .qr-conteudo {
+  margin-top: 12px; padding: 10px 12px; background: var(--off-bg);
+  border-radius: 9px; font-size: 11.5px; font-family: ui-monospace, monospace;
+  color: var(--muted); word-break: break-all; line-height: 1.5;
+  max-height: 64px; overflow: hidden;
+}
+
+@media (max-width: 980px) {
+  .mm .qr-layout { grid-template-columns: 1fr; }
+  .mm .qr-previa { position: static; order: -1; }
+  .mm .qr-palco { max-width: 320px; margin: 0 auto; }
+}

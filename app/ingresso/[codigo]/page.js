@@ -24,8 +24,6 @@ export default async function Ingresso({ params }) {
 
   const evento = pedido?.eventos_pagos;
 
-  // O QR leva para a tela de conferência. Quem não for administrador
-  // cai no login e não consegue liberar entrada nenhuma.
   const qr =
     pedido?.status === "pago"
       ? await gerarQr(`${process.env.NEXT_PUBLIC_SITE_URL}/painel/checkin/${pedido.codigo}`)
@@ -61,8 +59,6 @@ export default async function Ingresso({ params }) {
               )}
               {evento?.local && <div className="ingresso-local">{evento.local}</div>}
             </div>
-
-            <div className="ingresso-picote" aria-hidden="true" />
 
             <div className="ingresso-corpo">
               {qr && (
