@@ -49,7 +49,7 @@ export default function CampoSenha({
       )}
 
       {erro ? (
-        <span className="small" style={{ color: "#B42318", fontWeight: 400, marginTop: 6, display: "block" }}>
+        <span className="small" style={{ color: "var(--erro)", fontWeight: 400, marginTop: 6, display: "block" }}>
           {erro}
         </span>
       ) : ajuda ? (

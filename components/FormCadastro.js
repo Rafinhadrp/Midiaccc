@@ -43,12 +43,12 @@ export default function FormCadastro() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", padding: 18 }}>
+    <div className="entrada">
       <div style={{ width: "100%", maxWidth: 400 }}>
         <Marca />
 
         {pronto ? (
-          <div style={{ background: "#fff", borderRadius: 18, padding: 26 }}>
+          <div className="cartao-vidro">
             <div className="done" style={{ padding: "4px 0" }}>
               <div className="mark"><Icone nome="cheque" size={24} strokeWidth={2.2} /></div>
               <h3 style={{ fontSize: 20 }}>Conta criada</h3>
@@ -62,13 +62,13 @@ export default function FormCadastro() {
         ) : (
           <>
             <div style={{ marginBottom: 22 }}>
-              <h1 style={{ fontSize: 30, color: "#fff", fontWeight: 800 }}>Criar conta</h1>
-              <p className="small" style={{ color: "#8E91A3", marginTop: 8 }}>
+              <h1 style={{ fontSize: 30, color: "var(--text)", fontWeight: 800 }}>Criar conta</h1>
+              <p className="small" style={{ color: "var(--muted)", marginTop: 8 }}>
                 Cadastro rápido, só com o essencial.
               </p>
             </div>
 
-            <div style={{ background: "#fff", borderRadius: 18, padding: 24 }}>
+            <div className="cartao-vidro">
               {erro && <div className="aviso aviso-erro">{erro}</div>}
 
               <BotaoGoogle rotulo="Cadastrar com o Google" />
@@ -103,7 +103,7 @@ export default function FormCadastro() {
                   placeholder="(11) 99999-0000"
                 />
                 {telefoneCurto ? (
-                  <span className="small" style={{ color: "#B42318", fontWeight: 400, marginTop: 6, display: "block" }}>
+                  <span className="small" style={{ color: "var(--erro)", fontWeight: 400, marginTop: 6, display: "block" }}>
                     Informe o número com DDD.
                   </span>
                 ) : (

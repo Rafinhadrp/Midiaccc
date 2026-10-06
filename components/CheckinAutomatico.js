@@ -111,7 +111,7 @@ export default function CheckinAutomatico({ codigo }) {
         )}
 
         {resultado === "erro" && mensagem && (
-          <p className="small" style={{ marginTop: 14, color: "#B42318" }}>{mensagem}</p>
+          <p className="small" style={{ marginTop: 14, color: "var(--erro)" }}>{mensagem}</p>
         )}
       </div>
 

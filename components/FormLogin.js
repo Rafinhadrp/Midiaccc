@@ -65,7 +65,7 @@ export default function FormLogin() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", padding: 18 }}>
+    <div className="entrada">
       <div style={{ width: "100%", maxWidth: 400 }}>
         <Marca />
 
@@ -73,23 +73,23 @@ export default function FormLogin() {
           {recuperar && (
             <button
               className="btn-linha"
-              style={{ border: 0, background: "transparent", color: "#8E91A3", padding: 0, marginBottom: 12, fontSize: 13.5, fontWeight: 600 }}
+              style={{ border: 0, background: "transparent", color: "var(--muted)", padding: 0, marginBottom: 12, fontSize: 13.5, fontWeight: 600 }}
               onClick={() => { setRecuperar(false); setErro(null); setAviso(null); }}
             >
               <Icone nome="voltar" size={16} /> Voltar
             </button>
           )}
-          <h1 style={{ fontSize: 30, color: "#fff", fontWeight: 800 }}>
+          <h1 style={{ fontSize: 30, color: "var(--text)", fontWeight: 800 }}>
             {recuperar ? "Recuperar acesso" : "Entrar"}
           </h1>
-          <p className="small" style={{ color: "#8E91A3", marginTop: 8 }}>
+          <p className="small" style={{ color: "var(--muted)", marginTop: 8 }}>
             {recuperar
               ? "Informe seu e-mail e enviamos um link para criar uma senha nova."
               : "Acesse suas escalas e o painel do ministério."}
           </p>
         </div>
 
-        <div style={{ background: "#fff", borderRadius: 18, padding: 24 }}>
+        <div className="cartao-vidro">
           {erro && <div className="aviso aviso-erro">{erro}</div>}
           {aviso && <div className="aviso aviso-ok">{aviso}</div>}
 

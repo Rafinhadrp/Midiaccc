@@ -186,7 +186,7 @@ export default function GerenciarEventos({ eventos, pedidosPorEvento, resumo }) 
                     placeholder="Buscar por nome, código ou telefone"
                     style={{
                       width: "100%", padding: "10px 14px",
-                      border: "1px solid var(--line)", borderRadius: 10, background: "#fff",
+                      border: "1px solid var(--line)", borderRadius: 10, background: "var(--campo)",
                     }}
                   />
                 </div>

@@ -28,11 +28,11 @@ export default async function Aguardando() {
   const primeiro = insc?.nome?.trim().split(/\s+/)[0];
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", padding: 18 }}>
+    <div className="entrada">
       <div style={{ width: "100%", maxWidth: 420 }}>
         <Marca alinhamento="center" />
 
-        <div style={{ background: "#fff", borderRadius: 18, padding: 28, textAlign: "center" }}>
+        <div className="cartao-vidro" style={{ textAlign: "center" }}>
           <div
             style={{
               width: 52, height: 52, borderRadius: 14, margin: "0 auto 16px",

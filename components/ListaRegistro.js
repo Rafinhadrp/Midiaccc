@@ -82,7 +82,7 @@ export default function ListaRegistro({ notificacoes, podeApagar }) {
         {podeApagar && lista.length > 0 && (
           <button
             className="btn btn-sm btn-linha"
-            style={{ color: "#B42318", borderColor: "#F3C9C4" }}
+            style={{ color: "var(--erro)", borderColor: "var(--erro-borda)" }}
             onClick={() => setLimpando(true)}
           >
             <Icone nome="lixeira" size={15} /> Limpar tudo
@@ -107,8 +107,8 @@ export default function ListaRegistro({ notificacoes, podeApagar }) {
                 style={{
                   width: 34, height: 34, borderRadius: 9, flexShrink: 0, marginTop: 1,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  background: n.status === "erro" ? "#FDECEA" : "var(--off-bg)",
-                  color: n.status === "erro" ? "#B42318" : "var(--muted)",
+                  background: n.status === "erro" ? "var(--erro-bg)" : "var(--off-bg)",
+                  color: n.status === "erro" ? "var(--erro)" : "var(--muted)",
                 }}
               >
                 <Icone nome={n.canal === "whatsapp" ? "transmissao" : "email"} size={17} />
@@ -120,7 +120,7 @@ export default function ListaRegistro({ notificacoes, podeApagar }) {
                   {TIPOS[n.tipo] ?? n.tipo} · {quando(n.criado_em)}
                 </div>
                 {n.erro && (
-                  <div className="small" style={{ color: "#B42318", marginTop: 5 }}>{n.erro}</div>
+                  <div className="small" style={{ color: "var(--erro)", marginTop: 5 }}>{n.erro}</div>
                 )}
 
                 {aberta === n.id && n.conteudo && (

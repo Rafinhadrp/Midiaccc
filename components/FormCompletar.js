@@ -82,18 +82,18 @@ export default function FormCompletar({ usuario, funcoes, inscricoesAbertas }) {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--ink)", padding: "40px 18px 60px" }}>
+    <div className="entrada entrada-topo">
       <div style={{ width: "100%", maxWidth: 460, margin: "0 auto" }}>
         <Marca />
 
         <div style={{ marginBottom: 22 }}>
-          <h1 style={{ fontSize: 30, color: "#fff", fontWeight: 800 }}>Falta pouco</h1>
-          <p className="small" style={{ color: "#8E91A3", marginTop: 8 }}>
+          <h1 style={{ fontSize: 30, color: "var(--text)", fontWeight: 800 }}>Falta pouco</h1>
+          <p className="small" style={{ color: "var(--muted)", marginTop: 8 }}>
             O Google já trouxe seu nome e e-mail. Complete o que o ministério precisa saber.
           </p>
         </div>
 
-        <div style={{ background: "#fff", borderRadius: 18, padding: 24 }}>
+        <div className="cartao-vidro">
           {erro && <div className="aviso aviso-erro">{erro}</div>}
 
           <div className="conta-google">
@@ -120,7 +120,7 @@ export default function FormCompletar({ usuario, funcoes, inscricoesAbertas }) {
                 placeholder="(11) 99999-0000"
               />
               {telefoneCurto && (
-                <span className="small" style={{ color: "#B42318", fontWeight: 400, marginTop: 6, display: "block" }}>
+                <span className="small" style={{ color: "var(--erro)", fontWeight: 400, marginTop: 6, display: "block" }}>
                   Informe o número com DDD.
                 </span>
               )}
