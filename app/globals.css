@@ -1444,3 +1444,56 @@ html, body { background: #0A0B12; }
 .mm .qr-nivel.on { border-color: rgba(244,183,64,.6); background: rgba(244,183,64,.1); }
 /* a prévia do QR continua sobre branco, como ele vai ser impresso */
 .mm .qr-palco { border-color: var(--line); }
+
+/* ============================================================
+   v13 — campo de escolha de vidro (components/Selecao.js),
+   no lugar do <select> padrão do navegador.
+   ============================================================ */
+.mm .selecao { position: relative; width: 100%; min-width: 0; }
+.mm .selecao.aberta { z-index: 46; }
+.mm .selecao-botao {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 12px 14px; border-radius: var(--r-md); text-align: left;
+  border: 1px solid var(--line); background: var(--campo); color: var(--text);
+  font-weight: 500; transition: border-color .15s, box-shadow .15s, background .15s;
+}
+.mm .selecao-botao:hover { border-color: var(--borda-luz); }
+.mm .selecao-botao svg { flex-shrink: 0; color: var(--muted); transition: transform .18s; }
+.mm .selecao.aberta .selecao-botao {
+  border-color: rgba(244,183,64,.6); box-shadow: 0 0 0 4px rgba(244,183,64,.14);
+}
+.mm .selecao.aberta .selecao-botao svg { transform: rotate(180deg); color: var(--trigo); }
+.mm .selecao-texto { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mm .selecao-texto.vazio { color: var(--muted); }
+.mm .selecao-sm .selecao-botao { padding: 7px 10px 7px 12px; border-radius: 10px; font-size: 13px; font-weight: 600; }
+
+.mm .selecao > .selecao-lista {
+  position: absolute; left: 0; right: 0; top: calc(100% + 6px); min-width: 180px;
+  max-height: 300px; overflow-y: auto; padding: 5px; border-radius: 14px;
+  background: var(--vidro-solido);
+  -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+  border: 1px solid var(--line);
+  box-shadow: var(--brilho), 0 24px 60px -20px rgba(0,0,0,.75);
+  animation: mm-fade .12s ease-out;
+}
+.mm .selecao-sm > .selecao-lista { left: auto; right: 0; min-width: 200px; }
+.mm .selecao.para-cima > .selecao-lista { top: auto; bottom: calc(100% + 6px); }
+
+.mm .selecao-opcao {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 10px 12px; border: 1px solid transparent; border-radius: 9px;
+  background: transparent; color: var(--ink-soft); text-align: left; font-size: 14px; font-weight: 500;
+}
+.mm .selecao-opcao.foco { background: rgba(255,255,255,.08); color: var(--text); }
+.mm .selecao-opcao.marcado {
+  background: linear-gradient(135deg, rgba(244,183,64,.22), rgba(255,255,255,.04));
+  border-color: rgba(244,183,64,.35); color: var(--text); font-weight: 600;
+}
+.mm .selecao-opcao.marcado svg { color: var(--trigo); flex-shrink: 0; }
+.mm .selecao-opcao:disabled { color: var(--muted); cursor: default; font-style: italic; }
+
+/* no celular a lista vira folha de baixo */
+.mm .folha .selecao-lista { max-height: 60vh; overflow-y: auto; }
+.mm .folha .selecao-opcao { padding: 14px; font-size: 15px; }
+
+.mm .assign .selecao { flex: 1; }
