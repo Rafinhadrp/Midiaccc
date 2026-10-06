@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import Icone from "./Icones";
 import { TIPOS, montarConteudo, nomeArquivo } from "@/lib/qr-formatos";
 import { supabaseNavegador } from "@/lib/supabase/cliente";
+import Selecao from "./Selecao";
 
 /* ============================================================
    Gerador de QR code
@@ -396,18 +397,20 @@ export default function GeradorQr() {
 
           <div className="divider" style={{ margin: "18px 0 16px" }} />
 
-          <label className="field">
+          <div className="field">
             <span>Tamanho do PNG</span>
-            <select
+            <Selecao
+              rotulo="Tamanho do PNG"
               value={tamanhoPng}
-              onChange={(e) => setTamanhoPng(Number(e.target.value))}
-            >
-              <option value={512}>512 px — redes sociais</option>
-              <option value={1024}>1024 px — uso geral</option>
-              <option value={2048}>2048 px — impressão</option>
-              <option value={4096}>4096 px — banner grande</option>
-            </select>
-          </label>
+              onChange={(v) => setTamanhoPng(Number(v))}
+              opcoes={[
+                { valor: 512, nome: "512 px — redes sociais" },
+                { valor: 1024, nome: "1024 px — uso geral" },
+                { valor: 2048, nome: "2048 px — impressão" },
+                { valor: 4096, nome: "4096 px — banner grande" },
+              ]}
+            />
+          </div>
 
           <button
             className="btn btn-primary btn-bloco btn-linha"
@@ -577,17 +580,19 @@ function CamposDoTipo({ tipo, dados, mudar, setErro }) {
             />
           </label>
 
-          <label className="field">
+          <div className="field">
             <span>Segurança</span>
-            <select
+            <Selecao
+              rotulo="Segurança da rede"
               value={dados.seguranca ?? "wpa"}
-              onChange={(e) => mudar("seguranca", e.target.value)}
-            >
-              <option value="wpa">WPA / WPA2 / WPA3</option>
-              <option value="wep">WEP (antigo)</option>
-              <option value="nenhuma">Rede aberta</option>
-            </select>
-          </label>
+              onChange={(v) => mudar("seguranca", v)}
+              opcoes={[
+                { valor: "wpa", nome: "WPA / WPA2 / WPA3" },
+                { valor: "wep", nome: "WEP (antigo)" },
+                { valor: "nenhuma", nome: "Rede aberta" },
+              ]}
+            />
+          </div>
 
           {dados.seguranca !== "nenhuma" && (
             <label className="field">

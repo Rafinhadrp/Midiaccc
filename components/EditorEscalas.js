@@ -6,6 +6,7 @@ import Icone from "./Icones";
 import Menu from "./Menu";
 import Confirmar from "./Confirmar";
 import { supabaseNavegador } from "@/lib/supabase/cliente";
+import Selecao from "./Selecao";
 
 /* ============================================================
    Escalas
@@ -393,16 +394,20 @@ function CartaoCulto({
             {pessoa && !editando && <Avatar nome={pessoa.nome} foto={pessoa.foto_url} size={28} />}
 
             {editando ? (
-              <select
+              <Selecao
+                rotulo={f.nome}
                 value={perfilId ?? ""}
-                onChange={(e) =>
-                  setD({ ...d, escala: { ...d.escala, [f.id]: e.target.value || undefined } })
+                onChange={(v) =>
+                  setD({ ...d, escala: { ...d.escala, [f.id]: v || undefined } })
                 }
-              >
-                <option value="">Ninguém escalado</option>
-                {aptos.map((m) => <option key={m.id} value={m.id}>{m.nome}</option>)}
-                {aptos.length === 0 && <option disabled>ninguém apto a essa função</option>}
-              </select>
+                opcoes={[
+                  { valor: "", nome: "Ninguém escalado" },
+                  ...aptos.map((m) => ({ valor: m.id, nome: m.nome })),
+                  ...(aptos.length === 0
+                    ? [{ valor: "__nenhum", nome: "ninguém apto a essa função", desabilitado: true }]
+                    : []),
+                ]}
+              />
             ) : (
               <div style={{ flex: 1, minWidth: 0 }}>
                 {pessoa?.nome ?? <span className="muted">ninguém escalado</span>}

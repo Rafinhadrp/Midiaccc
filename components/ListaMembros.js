@@ -8,6 +8,7 @@ import Menu from "./Menu";
 import Confirmar from "./Confirmar";
 import CampoSenha from "./CampoSenha";
 import { supabaseNavegador } from "@/lib/supabase/cliente";
+import Selecao from "./Selecao";
 
 export default function ListaMembros({ membros, funcoes, papeis, podeEditar, meuId }) {
   const router = useRouter();
@@ -127,16 +128,14 @@ export default function ListaMembros({ membros, funcoes, papeis, podeEditar, meu
 
                 {podeEditar && (
                   <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
-                    <select
+                    <Selecao
+                      pequeno
+                      rotulo={`Papel de ${m.nome}`}
+                      style={{ width: "auto" }}
                       value={m.papel_id}
-                      onChange={(e) => mudarPapel(m.id, e.target.value)}
-                      style={{
-                        padding: "7px 10px", border: "1px solid var(--line)",
-                        borderRadius: 8, background: "var(--campo)", fontSize: 13, fontWeight: 600,
-                      }}
-                    >
-                      {papeis.map((p) => <option key={p.id} value={p.id}>{p.nome}</option>)}
-                    </select>
+                      onChange={(v) => mudarPapel(m.id, v)}
+                      opcoes={papeis.map((p) => ({ valor: p.id, nome: p.nome }))}
+                    />
 
                     <Menu
                       rotulo={`Opções de ${m.nome}`}

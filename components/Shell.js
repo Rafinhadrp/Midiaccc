@@ -29,7 +29,9 @@ export default function Shell({ perfil, children }) {
     router.refresh();
   }
 
-  const ativo = (href) => caminho === href || caminho.startsWith(href + "/");
+  // "/painel" é o início de todas as abas, então só conta quando é exatamente ele
+  const ativo = (href) =>
+    href === "/painel" ? caminho === href : caminho === href || caminho.startsWith(href + "/");
 
   return (
     <>

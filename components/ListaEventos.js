@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Icone from "./Icones";
+import Selecao from "./Selecao";
 
 const emReais = (c) =>
   (c / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -177,17 +178,15 @@ function ModalCompra({ evento, onFechar }) {
                 />
               </label>
 
-              <label className="field">
+              <div className="field">
                 <span>Quantos ingressos</span>
-                <select
+                <Selecao
+                  rotulo="Quantos ingressos"
                   value={f.quantidade}
-                  onChange={(e) => setF({ ...f, quantidade: Number(e.target.value) })}
-                >
-                  {Array.from({ length: maximo }, (_, i) => i + 1).map((n) => (
-                    <option key={n} value={n}>{n}</option>
-                  ))}
-                </select>
-              </label>
+                  onChange={(v) => setF({ ...f, quantidade: Number(v) })}
+                  opcoes={Array.from({ length: maximo }, (_, i) => ({ valor: i + 1, nome: String(i + 1) }))}
+                />
+              </div>
 
               <div className="total-linha">
                 <span>Total</span>
