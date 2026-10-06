@@ -70,7 +70,7 @@ export default function Confirmar({
           </button>
           <button
             className="btn"
-            style={{ background: "#B42318", borderColor: "#B42318", color: "#fff" }}
+            style={{ background: "var(--perigo)", borderColor: "var(--perigo)", color: "#fff" }}
             onClick={confirmar}
             disabled={!liberado || ocupado}
           >

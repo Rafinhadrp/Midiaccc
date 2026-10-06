@@ -172,7 +172,7 @@ export default function FormPerfil({ perfil, funcoes }) {
           </div>
           <button
             className="btn btn-sm btn-linha"
-            style={{ color: "#B42318", borderColor: "#F3C9C4" }}
+            style={{ color: "var(--erro)", borderColor: "var(--erro-borda)" }}
             onClick={() => setExcluir(true)}
           >
             <Icone nome="lixeira" size={15} /> Excluir

@@ -65,7 +65,7 @@ export default function ListaMembros({ membros, funcoes, papeis, podeEditar, meu
           placeholder="Buscar por nome, usuário ou e-mail"
           style={{
             width: "100%", padding: "11px 14px 11px 40px",
-            border: "1px solid var(--line)", borderRadius: 10, background: "#fff",
+            border: "1px solid var(--line)", borderRadius: 10, background: "var(--campo)",
           }}
         />
         <span style={{ position: "absolute", left: 13, top: "50%", transform: "translateY(-50%)", color: "var(--muted)" }}>
@@ -132,7 +132,7 @@ export default function ListaMembros({ membros, funcoes, papeis, podeEditar, meu
                       onChange={(e) => mudarPapel(m.id, e.target.value)}
                       style={{
                         padding: "7px 10px", border: "1px solid var(--line)",
-                        borderRadius: 8, background: "#fff", fontSize: 13, fontWeight: 600,
+                        borderRadius: 8, background: "var(--campo)", fontSize: 13, fontWeight: 600,
                       }}
                     >
                       {papeis.map((p) => <option key={p.id} value={p.id}>{p.nome}</option>)}

@@ -92,18 +92,18 @@ export default function ConfirmarRecuperacao() {
   }
 
   return (
-    <div style={{ minHeight: "100vh", background: "var(--ink)", display: "flex", alignItems: "center", justifyContent: "center", padding: 18 }}>
+    <div className="entrada">
       <div style={{ width: "100%", maxWidth: 400 }}>
         <Marca />
 
         <div style={{ marginBottom: 22 }}>
-          <h1 style={{ fontSize: 30, color: "#fff", fontWeight: 800 }}>Redefinir senha</h1>
-          <p className="small" style={{ color: "#8E91A3", marginTop: 8 }}>
+          <h1 style={{ fontSize: 30, color: "var(--text)", fontWeight: 800 }}>Redefinir senha</h1>
+          <p className="small" style={{ color: "var(--muted)", marginTop: 8 }}>
             Falta um passo para criar sua senha nova.
           </p>
         </div>
 
-        <div style={{ background: "#fff", borderRadius: 18, padding: 24 }}>
+        <div className="cartao-vidro">
           {erro ? (
             <>
               <div className="aviso aviso-erro">{erro}</div>

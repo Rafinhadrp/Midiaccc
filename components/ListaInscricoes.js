@@ -154,7 +154,7 @@ export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
                 {podeDecidir && (
                   <button
                     className="btn btn-sm btn-linha"
-                    style={{ color: "#B42318", borderColor: "#F3C9C4", marginTop: 4 }}
+                    style={{ color: "var(--erro)", borderColor: "var(--erro-borda)", marginTop: 4 }}
                     onClick={() => setExcluindo(i)}
                   >
                     <Icone nome="lixeira" size={15} /> Excluir inscrição

@@ -16,7 +16,7 @@ export default function Avatar({ nome, foto, size = 40, ring }) {
     width: size,
     height: size,
     fontSize: Math.round(size * 0.36),
-    background: foto ? "#EEE" : corDoNome(nome),
+    background: foto ? "rgba(255,255,255,.08)" : corDoNome(nome),
   };
   if (ring) estilo["--ring"] = ring;
   return (

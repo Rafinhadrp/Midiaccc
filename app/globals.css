@@ -1,27 +1,49 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
 
 .mm * { box-sizing: border-box; }
 .mm {
-  --bg: #F6F6F8;
-  --card: #FFFFFF;
-  --ink: #0F1015;
-  --ink-soft: #2A2C36;
-  --text: #16181F;
-  --muted: #75788A;
-  --line: #E9E9EF;
-  --line-2: #F1F1F5;
-  --tally: #FF3B2F;
-  --go: #16A46B;
-  --go-bg: #E6F7EF;
-  --wait: #B77A06;
-  --wait-bg: #FDF3DF;
-  --off-bg: #F1F1F5;
+  /* Identidade "Luz através do vidro": noite de culto, luzes de palco
+     (trigo, brasa, gel ciano) atrás de painéis de vidro fosco. */
+  --bg: #0A0B12;
+  --card: rgba(22,24,36,.55);
+  --ink: #F3F2F7;
+  --ink-soft: #D9D8E4;
+  --text: #F3F2F7;
+  --muted: #9C9BB0;
+  --line: rgba(255,255,255,.13);
+  --line-2: rgba(255,255,255,.07);
+  --tally: #FF3B30;
+  --go: #3DDC97;
+  --go-bg: rgba(61,220,151,.13);
+  --wait: #F4B740;
+  --wait-bg: rgba(244,183,64,.13);
+  --off-bg: rgba(255,255,255,.06);
+
+  --trigo: #F4B740;
+  --brasa: #FF6B4A;
+  --gel: #46D3E0;
+  --erro: #FF8A7A;
+  --erro-bg: rgba(255,90,70,.13);
+  --erro-borda: rgba(255,120,100,.4);
+  --perigo: #E5484D;
+  --campo: rgba(0,0,0,.24);
+  --borda-luz: rgba(255,255,255,.28);
+  --vidro-leve: rgba(22,24,36,.35);
+  --vidro: rgba(22,24,36,.55);
+  --vidro-solido: rgba(18,20,31,.9);
+  --blur: blur(22px) saturate(160%);
+  --brilho: inset 0 1px 0 rgba(255,255,255,.12);
+  --sombra-vidro: 0 20px 50px -24px rgba(0,0,0,.7);
+
+  --f-display: 'Unbounded', 'Arial Black', system-ui, sans-serif;
+  --f-corpo: 'Onest', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
   --r-lg: 20px;
   --r-md: 14px;
   --r-sm: 10px;
 
-  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-family: var(--f-corpo);
   color: var(--text);
   background: var(--bg);
   min-height: 100vh;
@@ -30,7 +52,7 @@
   -webkit-font-smoothing: antialiased;
 }
 .mm h1, .mm h2, .mm h3 {
-  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  font-family: var(--f-display);
   letter-spacing: -0.025em;
   margin: 0; line-height: 1.1; font-weight: 700;
 }
@@ -163,7 +185,7 @@
 .mm .hero .live .dot { background: var(--tally); box-shadow: 0 0 9px var(--tally); }
 .mm .hero .when { flex-shrink: 0; }
 .mm .hero .day {
-  font-family: 'Bricolage Grotesque'; font-size: 60px; font-weight: 800; line-height: .9;
+  font-family: var(--f-display); font-size: 60px; font-weight: 800; line-height: .9;
 }
 .mm .hero .mon { font-size: 13px; color: #8E91A3; margin-top: 6px; }
 .mm .hero h3 { font-size: 22px; color: #fff; }
@@ -181,7 +203,7 @@
 /* estatísticas */
 .mm .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 14px; }
 .mm .stat { padding: 18px; border-radius: var(--r-lg); }
-.mm .stat .n { font-family: 'Bricolage Grotesque'; font-size: 30px; font-weight: 700; line-height: 1; }
+.mm .stat .n { font-family: var(--f-display); font-size: 30px; font-weight: 700; line-height: 1; }
 .mm .stat .l { font-size: 13px; color: var(--muted); margin-top: 6px; }
 
 /* listas */
@@ -203,7 +225,7 @@
   width: 54px; height: 54px; border-radius: var(--r-md); background: var(--off-bg);
   display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.mm .ev-date .d { font-family: 'Bricolage Grotesque'; font-size: 21px; font-weight: 700; line-height: 1; }
+.mm .ev-date .d { font-family: var(--f-display); font-size: 21px; font-weight: 700; line-height: 1; }
 .mm .ev-date .w { font-size: 10.5px; color: var(--muted); margin-top: 2px; font-weight: 600; }
 .mm .assign { display: flex; align-items: center; gap: 12px; padding: 11px 20px; border-top: 1px solid var(--line-2); }
 .mm .assign .fn { width: 140px; flex-shrink: 0; font-weight: 600; font-size: 13.5px; display: flex; align-items: center; gap: 8px; }
@@ -506,7 +528,7 @@ html, body { margin: 0; padding: 0; }
 }
 .mm .ev-data-edit input {
   width: 30px; border: 0; background: transparent; text-align: center;
-  font-family: 'Bricolage Grotesque', sans-serif; font-size: 19px; font-weight: 700;
+  font-family: var(--f-display); font-size: 19px; font-weight: 700;
   padding: 0; color: var(--text);
 }
 .mm .ev-data-edit input::placeholder { color: #B9BCC8; font-weight: 600; }
@@ -801,7 +823,7 @@ html, body { margin: 0; padding: 0; }
 .mm .evento-local { font-size: 13.5px; color: var(--muted); margin-top: 2px; }
 .mm .evento-preco {
   margin-left: auto; flex-shrink: 0; text-align: right;
-  font-family: 'Bricolage Grotesque', sans-serif; font-size: 21px; font-weight: 700;
+  font-family: var(--f-display); font-size: 21px; font-weight: 700;
 }
 .mm .evento-desc {
   font-size: 14px; line-height: 1.55; color: var(--text);
@@ -818,12 +840,12 @@ html, body { margin: 0; padding: 0; }
   padding: 14px 16px; background: var(--off-bg); border-radius: var(--r-md);
   font-size: 15px; margin-top: 4px;
 }
-.mm .total-linha strong { font-size: 19px; font-family: 'Bricolage Grotesque', sans-serif; }
+.mm .total-linha strong { font-size: 19px; font-family: var(--f-display); }
 
 /* ---- tela do Pix ---- */
 .mm .pix-painel { text-align: center; }
 .mm .pix-valor {
-  font-family: 'Bricolage Grotesque', sans-serif; font-size: 30px; font-weight: 700;
+  font-family: var(--f-display); font-size: 30px; font-weight: 700;
   margin-bottom: 16px;
 }
 .mm .pix-qr {
@@ -850,7 +872,7 @@ html, body { margin: 0; padding: 0; }
 
 /* ---- código do ingresso ---- */
 .mm .codigo-grande {
-  font-family: 'Bricolage Grotesque', sans-serif; font-size: 31px; font-weight: 800;
+  font-family: var(--f-display); font-size: 31px; font-weight: 800;
   letter-spacing: 0.06em; margin: 14px 0 18px;
 }
 
@@ -860,7 +882,7 @@ html, body { margin: 0; padding: 0; }
 }
 .mm .ingresso-topo { padding: 24px 24px 20px; background: var(--ink); color: #fff; }
 .mm .ingresso-evento {
-  font-family: 'Bricolage Grotesque', sans-serif; font-size: 21px; font-weight: 700;
+  font-family: var(--f-display); font-size: 21px; font-weight: 700;
 }
 .mm .ingresso-quando { font-size: 13.5px; color: #A7AAB8; margin-top: 6px; }
 .mm .ingresso-local { font-size: 13.5px; color: #A7AAB8; margin-top: 2px; }
@@ -990,7 +1012,7 @@ html, body { margin: 0; padding: 0; }
 .mm .veredito.ruim { background: rgba(170, 33, 22, .96); }
 
 .mm .veredito-titulo {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: var(--f-display);
   font-size: 27px; font-weight: 800; margin-top: 12px; line-height: 1.1;
 }
 .mm .veredito-nome { font-size: 16px; font-weight: 600; margin-top: 8px; opacity: .95; }
@@ -1146,3 +1168,279 @@ html, body { margin: 0; padding: 0; }
   .mm .qr-previa { position: static; order: -1; }
   .mm .qr-palco { max-width: 320px; margin: 0 auto; }
 }
+
+/* ============================================================
+   v12 — identidade "Luz através do vidro"
+   Fundo noturno com luzes de palco (trigo, brasa, gel ciano)
+   e painéis de vidro fosco por cima. As cores fixas das versões
+   anteriores são ajustadas aqui para o tema escuro.
+   O desfoque real (backdrop-filter) fica só no que flutua sobre
+   o conteúdo — menus, modais, barra de abas — para não pesar no
+   celular e não quebrar menus e modais que vivem dentro de cartões.
+   ============================================================ */
+
+html, body { background: #0A0B12; }
+.mm { color-scheme: dark; position: relative; isolation: isolate; }
+.mm ::selection { background: rgba(244,183,64,.35); color: #fff; }
+.mm :focus-visible { outline-color: var(--trigo); }
+.mm input[type="checkbox"], .mm input[type="radio"], .mm .matrix input { accent-color: var(--trigo); }
+.mm option { background: #12141F; color: var(--text); }
+.mm input::placeholder, .mm textarea::placeholder { color: #6E6D82; }
+
+.mm h1, .mm h2, .mm h3 { letter-spacing: -0.02em; text-wrap: balance; }
+
+/* ---- luzes de palco ao fundo ---- */
+.mm .luzes { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+.mm .luzes i {
+  position: absolute; border-radius: 50%; filter: blur(90px);
+  animation: mm-deriva 24s ease-in-out infinite alternate;
+}
+.mm .luzes i:nth-child(1) { width: 52vmax; height: 52vmax; left: -16vmax; top: -18vmax; background: var(--trigo); opacity: .26; }
+.mm .luzes i:nth-child(2) { width: 42vmax; height: 42vmax; right: -14vmax; top: 22vh; background: var(--brasa); opacity: .2; animation-delay: -8s; }
+.mm .luzes i:nth-child(3) { width: 44vmax; height: 44vmax; left: 22vw; bottom: -24vmax; background: var(--gel); opacity: .18; animation-delay: -15s; }
+.mm .luzes::after {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.045) 1px, transparent 1px);
+  background-size: 3px 3px;
+}
+@keyframes mm-deriva { to { transform: translate(5vw, 4vh) scale(1.1); } }
+@media (prefers-reduced-motion: reduce) { .mm .luzes i { animation: none; } }
+
+/* ---- vidro: cartões ---- */
+.mm .card,
+.mm .pub-card,
+.mm .cartao-vidro,
+.mm .evento-card,
+.mm .ingresso,
+.mm .checkin-cartao,
+.mm .politica .quadro {
+  background: linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.025)), var(--vidro-leve);
+  border: 1px solid var(--line);
+  box-shadow: var(--brilho), var(--sombra-vidro);
+}
+.mm .pub-card, .mm .cartao-vidro {
+  background: linear-gradient(145deg, rgba(255,255,255,.07), rgba(255,255,255,.02)), var(--vidro);
+  border-radius: 22px;
+}
+.mm .cartao-vidro { padding: 24px; }
+
+/* ---- vidro: o que flutua ---- */
+.mm .menu,
+.mm .modal,
+.mm .folha,
+.mm .tabbar {
+  background: var(--vidro-solido);
+  -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+  border: 1px solid var(--line);
+  box-shadow: var(--brilho), 0 24px 60px -20px rgba(0,0,0,.75);
+}
+.mm .overlay, .mm .folha-fundo { background: rgba(5,6,10,.6); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
+.mm .folha { border-bottom: 0; }
+.mm .folha-alca { background: var(--borda-luz); }
+
+/* ---- botões ---- */
+.mm { --r-btn: 11px; }
+.mm .btn {
+  background: rgba(255,255,255,.07); border-color: var(--line); color: var(--text);
+  transition: background .15s, border-color .15s, box-shadow .15s, transform .15s;
+}
+.mm .btn:hover { background: rgba(255,255,255,.13); border-color: var(--borda-luz); }
+.mm .btn:active { transform: translateY(1px); }
+.mm .btn-primary {
+  background: linear-gradient(135deg, #FFD27A, var(--trigo) 45%, #E89A2A);
+  border-color: rgba(255,226,160,.6); color: #1A1204;
+  box-shadow: 0 8px 24px -10px rgba(244,183,64,.8), inset 0 1px 0 rgba(255,255,255,.45);
+}
+.mm .btn-primary:hover { background: linear-gradient(135deg, #FFDB8E, #F7C255 45%, #EDA537); border-color: rgba(255,226,160,.8); }
+.mm .btn-go { background: rgba(61,220,151,.16); border-color: rgba(61,220,151,.45); color: #9FF0CB; }
+.mm .btn-go:hover { background: rgba(61,220,151,.24); filter: none; }
+.mm .btn-ico:hover { background: rgba(255,255,255,.09); }
+.mm .btn-google { background: rgba(255,255,255,.07); border-color: var(--line); color: var(--text); }
+.mm .btn-google:hover { background: rgba(255,255,255,.13); border-color: var(--borda-luz); }
+
+/* ---- campos ---- */
+.mm .field input, .mm .field select, .mm .field textarea,
+.mm .assign select, .mm .msgbox,
+.mm .ev-topo-edit .campo-titulo, .mm .ev-topo-edit .campo-hora {
+  background: var(--campo); border-color: var(--line); color: var(--text);
+  transition: border-color .15s, box-shadow .15s;
+}
+.mm .field input:focus, .mm .field select:focus, .mm .field textarea:focus,
+.mm .assign select:focus, .mm .msgbox:focus,
+.mm .ev-topo-edit input:focus {
+  background: rgba(0,0,0,.3); border-color: rgba(244,183,64,.6);
+  box-shadow: 0 0 0 4px rgba(244,183,64,.14); outline: none;
+}
+.mm .field > span { color: var(--ink-soft); }
+.mm .ev-data-edit input::placeholder { color: #6E6D82; }
+
+/* ---- pílulas e etiquetas ---- */
+.mm .pill { border-color: var(--line-2); }
+.mm .pill-pick { background: rgba(255,255,255,.05); border-color: var(--line); color: var(--ink-soft); }
+.mm .pill-pick:hover { border-color: var(--borda-luz); }
+.mm .pill-on, .mm .pill-pick.pill-on {
+  background: linear-gradient(135deg, rgba(244,183,64,.26), rgba(255,255,255,.06));
+  border-color: rgba(244,183,64,.55); color: var(--text);
+}
+.mm .pill-go { border-color: rgba(61,220,151,.3); }
+.mm .pill-wait { border-color: rgba(244,183,64,.3); }
+.mm .pill-go .dot, .mm .pill-wait .dot { box-shadow: 0 0 8px currentColor; }
+.mm .fn-tag { background: rgba(255,255,255,.06); color: var(--ink-soft); border: 1px solid var(--line-2); }
+
+/* ---- avatar ---- */
+.mm .av-ring { box-shadow: 0 0 0 2px var(--bg), 0 0 0 3.5px var(--ring, transparent); }
+.mm .av-stack .av { box-shadow: 0 0 0 2px var(--bg); }
+.mm .av-edit .cam { background: var(--trigo); color: #1A1204; border-color: var(--bg); }
+
+/* ---- marca ---- */
+.mm .marca { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+.mm .marca-centro { justify-content: center; }
+.mm .marca-selo, .mm .brand .mark, .mm .fechado-ico {
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  background: linear-gradient(145deg, rgba(255,255,255,.18), rgba(255,255,255,.04));
+  border: 1px solid var(--borda-luz);
+  box-shadow: var(--brilho), 0 8px 24px -10px rgba(244,183,64,.45);
+}
+.mm .marca-nome { font-family: var(--f-display); font-weight: 700; font-size: 15px; line-height: 1.2; color: var(--text); }
+.mm .marca-sub { color: var(--muted); font-size: 12.5px; }
+
+/* ---- trilho lateral do painel ---- */
+.mm .rail {
+  margin: 12px 0 12px 12px; height: calc(100vh - 24px); top: 12px;
+  border-radius: 22px; padding: 20px 12px 14px;
+  background: linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.02)), var(--vidro-leve);
+  border: 1px solid var(--line); box-shadow: var(--brilho), var(--sombra-vidro);
+}
+.mm .brand { padding: 0 8px 20px; }
+.mm .brand h3 { font-size: 14px; }
+.mm .navitem { color: var(--muted); border: 1px solid transparent; padding: 10px 12px; transition: background .15s, color .15s; }
+.mm .navitem:hover { background: rgba(255,255,255,.06); color: var(--text); }
+.mm .navitem.on {
+  background: linear-gradient(135deg, rgba(244,183,64,.22), rgba(255,255,255,.05));
+  border-color: rgba(244,183,64,.35); color: var(--text); padding: 10px 12px;
+}
+.mm .navitem.on .ico { color: var(--trigo); }
+.mm .navitem .count { font-family: var(--f-mono); }
+.mm .me { background: rgba(255,255,255,.05); border-color: var(--line); }
+.mm .me:hover { border-color: var(--borda-luz); }
+.mm .me.me-on { border-color: rgba(244,183,64,.55); }
+
+.mm .topbar h2 { font-size: 25px; }
+
+/* ---- destaque do próximo culto ---- */
+.mm .hero {
+  color: var(--text); border-radius: 24px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(244,183,64,.28), transparent 45%),
+    linear-gradient(145deg, rgba(255,255,255,.09), rgba(255,255,255,.025)), var(--vidro);
+  border: 1px solid var(--line); box-shadow: var(--brilho), var(--sombra-vidro);
+}
+.mm .hero .live, .mm .pub .live {
+  font-family: var(--f-mono); font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase;
+  color: #FF9C94;
+}
+.mm .hero .day { font-weight: 800; letter-spacing: -0.04em; }
+.mm .hero .mon { font-family: var(--f-mono); font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+.mm .hero h3 { color: var(--text); }
+.mm .hero .meta { color: var(--muted); }
+.mm .crew-slot { background: rgba(10,11,18,.4); border: 1px solid var(--line); }
+.mm .crew-slot .nm { color: var(--text); }
+.mm .crew-slot .fn { color: var(--muted); }
+.mm .crew-slot.vago { border: 1px dashed var(--borda-luz); background: transparent; }
+.mm .crew-slot.vago .nm { color: var(--muted); }
+.mm .hero-obs { background: rgba(0,0,0,.25); color: var(--ink-soft); border: 1px solid var(--line-2); }
+
+.mm .stat .n { font-variant-numeric: tabular-nums; }
+.mm .ev-date .w { font-family: var(--f-mono); letter-spacing: .04em; }
+
+/* ---- barra de abas do celular ---- */
+@media (max-width: 880px) {
+  .mm .tabbar { border-radius: 26px; }
+  .mm .tab { border: 1px solid transparent; border-radius: 20px; }
+  .mm .tab.on {
+    background: linear-gradient(135deg, rgba(244,183,64,.28), rgba(255,255,255,.07));
+    border-color: rgba(244,183,64,.4); color: var(--text);
+  }
+  .mm .tab.on .ico { color: var(--trigo); }
+  .mm .tab.on .av { box-shadow: 0 0 0 2px var(--trigo); }
+  .mm .modal { border-bottom: 0; }
+  .mm .modal-foot { background: var(--vidro-solido); border-top-color: var(--line); }
+  .mm .pub h1 { font-size: 30px; }
+}
+
+/* ---- avisos, abas internas, perigo ---- */
+.mm .aviso-erro { background: var(--erro-bg); color: var(--erro); border: 1px solid var(--erro-borda); }
+.mm .aviso-ok { border: 1px solid rgba(61,220,151,.3); }
+.mm .aba.on { color: var(--text); border-bottom-color: var(--trigo); }
+.mm .perigo-card { border-color: var(--erro-borda); }
+.mm .perigo-card h3 { color: var(--erro); }
+.mm .menu-item.perigo, .mm .confirma-ico { color: var(--erro); }
+.mm .menu-item.perigo:hover, .mm .confirma-ico { background: var(--erro-bg); }
+.mm .menu-item:hover { background: rgba(255,255,255,.07); }
+.mm .forca i.on-1 { background: var(--perigo); }
+
+/* ---- escalas e perfil ---- */
+.mm .obs-lida { color: #F7D58A; border: 1px solid rgba(244,183,64,.25); }
+.mm .escala-rodape { background: rgba(255,255,255,.025); }
+.mm .atalho:hover { background: rgba(255,255,255,.04); }
+.mm .atalho-ico { background: rgba(255,255,255,.07); }
+
+/* ---- chave liga/desliga ---- */
+.mm .chave { background: rgba(255,255,255,.16); box-shadow: inset 0 1px 2px rgba(0,0,0,.4); }
+.mm .chave.on { background: var(--go); }
+
+/* ---- páginas públicas ---- */
+.mm .pub, .mm .politica { background: transparent; }
+.mm .pub .live {
+  background: rgba(255,255,255,.07); border: 1px solid var(--line);
+  -webkit-backdrop-filter: var(--blur); backdrop-filter: var(--blur);
+}
+.mm .pub .live .dot.verde { background: var(--go); box-shadow: 0 0 9px var(--go); }
+.mm .pub h1 { color: var(--text); letter-spacing: -0.03em; }
+.mm .pub .lede { color: var(--muted); }
+.mm .rodape-escuro { color: var(--muted); }
+.mm .rodape-escuro a, .mm .politica a { color: var(--trigo); }
+.mm .fechado-ico { background: linear-gradient(145deg, rgba(255,255,255,.18), rgba(255,255,255,.04)); }
+
+/* telas de entrada: login, cadastro, senha, aguardando */
+.mm .entrada { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 18px; }
+.mm .entrada.entrada-topo { display: block; padding: 40px 18px 60px; }
+.mm .entrada.entrada-topo > div { margin: 0 auto; }
+
+/* ---- eventos, Pix e ingresso ---- */
+.mm .evento-preco { color: var(--trigo); }
+.mm .pix-codigo, .mm .qr-conteudo { font-family: var(--f-mono); }
+.mm .codigo-grande { font-family: var(--f-mono); font-weight: 600; color: var(--trigo); }
+.mm .girando { border-top-color: var(--trigo); }
+.mm .ingresso-topo {
+  color: var(--text);
+  background: radial-gradient(circle at 100% 0%, rgba(255,107,74,.3), transparent 50%),
+              linear-gradient(135deg, rgba(244,183,64,.3), rgba(244,183,64,.08));
+  border-bottom: 1px dashed var(--borda-luz);
+}
+.mm .ingresso-quando, .mm .ingresso-local { color: var(--ink-soft); }
+.mm .ingresso-rotulo { font-family: var(--f-mono); font-weight: 600; letter-spacing: .1em; }
+.mm .selo-expirado, .mm .selo-cancelado, .mm .checkin-ico.erro { background: var(--erro-bg); color: var(--erro); }
+
+/* ---- conferência na entrada ---- */
+.mm .leitor-palco { background: rgba(0,0,0,.3); border: 1px solid var(--line); }
+.mm .leitor-palco.ativo { background: #000; }
+.mm .leitor-mira { border-color: var(--trigo); box-shadow: 0 0 0 2000px rgba(5,6,10,.45); }
+.mm .hist-ponto.ruim { background: var(--perigo); }
+.mm .checkin-cartao.ok { border-color: rgba(61,220,151,.45); background: linear-gradient(145deg, rgba(61,220,151,.16), rgba(61,220,151,.04)), var(--vidro-leve); }
+.mm .checkin-cartao.aviso { border-color: rgba(244,183,64,.45); background: linear-gradient(145deg, rgba(244,183,64,.16), rgba(244,183,64,.04)), var(--vidro-leve); }
+.mm .checkin-cartao.ruim { border-color: var(--erro-borda); background: linear-gradient(145deg, rgba(255,90,70,.16), rgba(255,90,70,.04)), var(--vidro-leve); }
+.mm .checkin-cartao.aviso .checkin-ico-grande { color: #1A1204; }
+.mm .checkin-cartao.ruim .checkin-ico-grande { background: var(--perigo); }
+.mm .checkin-cartao .checkin-dados { background: rgba(0,0,0,.22); }
+
+/* ---- gerador de QR ---- */
+.mm .qr-cor { border-color: var(--line); }
+.mm .qr-cor.on { border-color: var(--trigo); box-shadow: inset 0 0 0 2px var(--bg); }
+.mm .qr-upload { background: var(--campo); border-color: var(--line); }
+.mm .qr-upload:hover { border-color: var(--borda-luz); background: rgba(255,255,255,.05); }
+.mm .qr-nivel { background: rgba(255,255,255,.04); border-color: var(--line); color: var(--text); }
+.mm .qr-nivel:hover { border-color: var(--borda-luz); }
+.mm .qr-nivel.on { border-color: rgba(244,183,64,.6); background: rgba(244,183,64,.1); }
+/* a prévia do QR continua sobre branco, como ele vai ser impresso */
+.mm .qr-palco { border-color: var(--line); }

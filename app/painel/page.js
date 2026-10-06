@@ -76,8 +76,8 @@ export default async function Painel() {
                         <Avatar nome={p.nome} foto={p.foto_url} size={30} ring={f.cor} />
                       ) : (
                         <div style={{
-                          width: 30, height: 30, borderRadius: "50%", border: "1px dashed #4A4D5C",
-                          display: "flex", alignItems: "center", justifyContent: "center", color: "#4A4D5C",
+                          width: 30, height: 30, borderRadius: "50%", border: "1px dashed var(--borda-luz)",
+                          display: "flex", alignItems: "center", justifyContent: "center", color: "var(--muted)",
                         }}>
                           <Icone nome={f.icone} size={14} />
                         </div>

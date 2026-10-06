@@ -392,9 +392,9 @@ function ModalFuncao({ funcao, onCancelar, onSalvar }) {
                   className="btn-ico"
                   style={{
                     width: 40, height: 40, borderRadius: 9,
-                    border: "1px solid " + (icone === n ? "var(--ink)" : "var(--line)"),
-                    background: icone === n ? "var(--ink)" : "#fff",
-                    color: icone === n ? "#fff" : "var(--muted)",
+                    border: "1px solid " + (icone === n ? "var(--trigo)" : "var(--line)"),
+                    background: icone === n ? "var(--trigo)" : "var(--campo)",
+                    color: icone === n ? "#1A1204" : "var(--muted)",
                   }}
                   onClick={() => setIcone(n)}
                   aria-label={`Ícone ${n}`}
@@ -415,8 +415,8 @@ function ModalFuncao({ funcao, onCancelar, onSalvar }) {
                   aria-label={`Cor ${c}`}
                   style={{
                     width: 30, height: 30, borderRadius: 8, background: c,
-                    border: cor === c ? "2px solid var(--ink)" : "1px solid var(--line)",
-                    boxShadow: cor === c ? "inset 0 0 0 2px #fff" : "none",
+                    border: cor === c ? "2px solid var(--trigo)" : "1px solid var(--line)",
+                    boxShadow: cor === c ? "inset 0 0 0 2px var(--bg)" : "none",
                   }}
                 />
               ))}
