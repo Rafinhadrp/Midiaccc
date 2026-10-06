@@ -33,7 +33,8 @@ export async function middleware(request) {
     return NextResponse.redirect(url);
   }
 
-  if (user && caminho === "/login") {
+  // Quem já entrou não precisa ver a tela de início
+  if (user && (caminho === "/login" || caminho === "/")) {
     const url = request.nextUrl.clone();
     url.pathname = "/painel";
     url.search = "";
