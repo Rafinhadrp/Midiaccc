@@ -27,7 +27,7 @@ export default async function Inscrever() {
             <div className="live"><span className="dot verde" />Inscrições abertas</div>
             <h1>Sirva na multimídia</h1>
             <p className="lede">
-              Câmera, som, projeção, transmissão e fotografia. Não precisa saber nada ainda —
+              Câmera, som, projeção, transmissão e fotografia. Não precisa saber nada ainda,
               a gente treina você do zero.
             </p>
 

@@ -4,9 +4,9 @@ import TelaInicio from "@/components/TelaInicio";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Mídia CCC — Ministério de Multimídia",
+  title: "Mídia CCC · Ministério de Multimídia",
   description:
-    "Câmera, som, projeção, transmissão e fotografia. Conheça a equipe que faz cada culto da Colheita acontecer e inscreva-se para servir.",
+    "Câmera, som, projeção, transmissão e fotografia. Conheça a equipe de multimídia da Colheita e inscreva-se para servir.",
 };
 
 /**

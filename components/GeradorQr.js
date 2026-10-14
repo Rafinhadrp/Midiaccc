@@ -337,15 +337,15 @@ export default function GeradorQr() {
           {aba === "nivel" && (
             <div style={{ marginTop: 14 }}>
               <div className="small muted" style={{ marginBottom: 14 }}>
-                Quanto mais alto, mais o código aguenta sujeira, dobra e logo por cima —
-                em troca, fica mais denso.
+                Quanto mais alto, mais o código aguenta sujeira, dobra e logo por cima.
+                Em troca, ele fica mais denso.
               </div>
 
               {[
-                ["L", "Baixo", "recupera 7% — só para tela limpa"],
-                ["M", "Médio", "recupera 15% — uso comum"],
-                ["Q", "Alto", "recupera 25% — impressão e arte"],
-                ["H", "Máximo", "recupera 30% — obrigatório com logo"],
+                ["L", "Baixo", "recupera 7%, só para tela limpa"],
+                ["M", "Médio", "recupera 15%, uso comum"],
+                ["Q", "Alto", "recupera 25%, impressão e arte"],
+                ["H", "Máximo", "recupera 30%, obrigatório com logo"],
               ].map(([id, nome, desc]) => (
                 <button
                   key={id}
@@ -404,10 +404,10 @@ export default function GeradorQr() {
               value={tamanhoPng}
               onChange={(v) => setTamanhoPng(Number(v))}
               opcoes={[
-                { valor: 512, nome: "512 px — redes sociais" },
-                { valor: 1024, nome: "1024 px — uso geral" },
-                { valor: 2048, nome: "2048 px — impressão" },
-                { valor: 4096, nome: "4096 px — banner grande" },
+                { valor: 512, nome: "512 px · redes sociais" },
+                { valor: 1024, nome: "1024 px · uso geral" },
+                { valor: 2048, nome: "2048 px · impressão" },
+                { valor: 4096, nome: "4096 px · banner grande" },
               ]}
             />
           </div>
@@ -430,8 +430,8 @@ export default function GeradorQr() {
           </button>
 
           <div className="small muted" style={{ marginTop: 12, lineHeight: 1.5 }}>
-            O SVG não perde qualidade em nenhum tamanho — é o certo para banner,
-            camiseta e qualquer coisa impressa grande.
+            O SVG não perde qualidade em nenhum tamanho. Use ele para banner,
+            camiseta e qualquer impressão grande.
           </div>
         </div>
 
