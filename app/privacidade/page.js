@@ -2,7 +2,7 @@ import Link from "next/link";
 import Icone from "@/components/Icones";
 
 export const metadata = {
-  title: "Política de privacidade — Ministério de Multimídia",
+  title: "Política de privacidade · Ministério de Multimídia",
   description: "Como o Ministério de Multimídia da Colheita trata os seus dados.",
 };
 
@@ -89,10 +89,10 @@ export default function Privacidade() {
           nosso nome:
         </p>
         <ul>
-          <li><strong>Supabase</strong> — banco de dados, autenticação e armazenamento das fotos</li>
-          <li><strong>Vercel</strong> — hospedagem do site</li>
-          <li><strong>Resend</strong> — envio dos e-mails do sistema</li>
-          <li><strong>Google</strong> — apenas se você optar por entrar com a conta Google</li>
+          <li><strong>Supabase</strong>: banco de dados, autenticação e armazenamento das fotos</li>
+          <li><strong>Vercel</strong>: hospedagem do site</li>
+          <li><strong>Resend</strong>: envio dos e-mails do sistema</li>
+          <li><strong>Google</strong>: apenas se você optar por entrar com a conta Google</li>
         </ul>
         <p>
           Esses serviços podem armazenar dados fora do Brasil. Todos possuem políticas

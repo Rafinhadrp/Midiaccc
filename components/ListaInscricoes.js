@@ -199,7 +199,7 @@ export default function ListaInscricoes({ inscricoes, funcoes, podeDecidir }) {
           titulo={`Excluir a inscrição de ${excluindo.nome.split(" ")[0]}`}
           descricao={
             excluindo.status === "aprovado"
-              ? "Isso apaga só o registro da inscrição. A conta e o perfil da pessoa continuam ativos — para removê-los, use a aba Membros."
+              ? "Isso apaga só o registro da inscrição. A conta e o perfil da pessoa continuam ativos. Para removê-los, use a aba Membros."
               : "O registro some da lista. A conta criada na inscrição continua existindo até alguém removê-la."
           }
           rotuloBotao="Excluir inscrição"

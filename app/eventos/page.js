@@ -7,7 +7,7 @@ import ListaEventos from "@/components/ListaEventos";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Eventos — Ministério de Multimídia",
+  title: "Eventos · Ministério de Multimídia",
 };
 
 export default async function Eventos() {

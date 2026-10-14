@@ -43,9 +43,9 @@ export default function TelaInicio({ funcoes, abertas, membros, proximo }) {
             Alguém precisa estar <em>atrás das câmeras</em>.
           </h1>
           <p className="ini-lede">
-            A Mídia CCC é o Ministério de Multimídia da Colheita. Somos a equipe que
-            filma, mixa, projeta, transmite e fotografa cada culto, para que a
-            mensagem chegue em quem está no templo e em quem está assistindo de casa.
+            A Mídia CCC é o Ministério de Multimídia da Colheita. A gente filma, cuida
+            do som, projeta as letras, transmite e fotografa os cultos, para quem está
+            no templo e para quem assiste de casa.
           </p>
           <div className="ini-acoes">
             <Link href={ctaHref} className="btn btn-primary ini-cta">
@@ -82,8 +82,8 @@ export default function TelaInicio({ funcoes, abertas, membros, proximo }) {
             </>
           ) : (
             <>
-              <b className="ini-mono">0h de experiência</b>
-              <span>é o que você precisa para começar</span>
+              <b className="ini-mono">0h</b>
+              <span>de experiência para começar</span>
             </>
           )}
         </div>
@@ -95,8 +95,8 @@ export default function TelaInicio({ funcoes, abertas, membros, proximo }) {
           <span className="ini-rotulo">As funções</span>
           <h2>Escolha onde você quer servir</h2>
           <p>
-            Ninguém precisa chegar sabendo. Você escolhe uma ou mais áreas na inscrição
-            e a equipe treina você no próprio culto, ao lado de quem já faz.
+            Você escolhe uma ou mais áreas na inscrição. Não precisa ter experiência:
+            a equipe ensina no próprio culto, ao lado de quem já faz.
           </p>
         </div>
         <div className="ini-funcoes">
@@ -123,17 +123,17 @@ export default function TelaInicio({ funcoes, abertas, membros, proximo }) {
           <li className="ini-passo">
             <span className="ini-passo-n">1</span>
             <h3>Faça sua inscrição</h3>
-            <p>Conte quem você é, quando pode servir e quais funções te chamam a atenção. Leva uns dois minutos.</p>
+            <p>Conte quem você é, em quais dias pode servir e quais funções te interessam. Leva uns dois minutos.</p>
           </li>
           <li className="ini-passo">
             <span className="ini-passo-n">2</span>
             <h3>A liderança responde</h3>
-            <p>Você recebe a resposta por e-mail e WhatsApp. Aprovado, já pode entrar com o e-mail e a senha que criou.</p>
+            <p>A resposta chega por e-mail e WhatsApp. Se for aprovado, você entra com o e-mail e a senha que criou na inscrição.</p>
           </li>
           <li className="ini-passo">
             <span className="ini-passo-n">3</span>
             <h3>Entre na escala</h3>
-            <p>Seu nome aparece nos cultos em que você foi escalado. É só confirmar a presença pelo celular.</p>
+            <p>Quando te escalarem para um culto, seu nome aparece lá e você confirma a presença pelo celular.</p>
           </li>
         </ol>
       </section>
@@ -143,8 +143,8 @@ export default function TelaInicio({ funcoes, abertas, membros, proximo }) {
         <div className="ini-final-tally" aria-hidden="true">
           <span className="ini-led" /> REC
         </div>
-        <h2>O próximo culto já tem um lugar esperando por você.</h2>
-        <p>Venha servir com o que você vê e ouve.</p>
+        <h2>Quer servir na Mídia CCC?</h2>
+        <p>Faça sua inscrição e a liderança entra em contato.</p>
         <div className="ini-acoes ini-acoes-centro">
           <Link href={ctaHref} className="btn btn-primary ini-cta">
             {ctaTexto}
